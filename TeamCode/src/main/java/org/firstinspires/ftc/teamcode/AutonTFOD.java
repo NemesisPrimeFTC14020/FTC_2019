@@ -40,7 +40,7 @@ public class AutonTFOD extends LinearOpMode {
     public Hardware Hardware = new Hardware();
     public void runOpMode() {
         Methods.initVuforia();
-        Hardware.hardwareMap();
+        Hardware.hardwareMap(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();

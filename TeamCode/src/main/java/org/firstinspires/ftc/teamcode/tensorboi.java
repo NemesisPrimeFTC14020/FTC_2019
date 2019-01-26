@@ -52,7 +52,7 @@ import java.util.List;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "I Listen to Britney Spears unironiclly", group = "Concept")
+@Autonomous(name = "tensorboi", group = "Concept")
 
 public class tensorBoi extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
