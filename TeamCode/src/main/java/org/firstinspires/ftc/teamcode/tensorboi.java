@@ -54,7 +54,7 @@ import java.util.List;
  */
 @Autonomous(name = "I Listen to Britney Spears unironiclly", group = "Concept")
 
-public class tensorboi extends LinearOpMode {
+public class tensorBoi extends LinearOpMode {
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
