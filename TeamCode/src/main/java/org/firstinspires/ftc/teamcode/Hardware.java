@@ -12,8 +12,8 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 public class Hardware  extends LinearOpMode {
         public void runOpMode() {
         }
-        public void hardwareMap () {
-            leftDrive = hardwareMap.get(DcMotor.class, "left_drive");
+        public void hardwareMap (LinearOpMode myOpMode) {
+            leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
             rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
             elevatorDrive = hardwareMap.get(DcMotor.class, "elevator_drive");
             Markerservo = hardwareMap.get(Servo.class, "servo");
