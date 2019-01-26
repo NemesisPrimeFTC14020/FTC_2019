@@ -39,7 +39,7 @@ public class Methods  extends LinearOpMode {
     public Variables Variables = new Variables();
     public Hardware Hardware = new Hardware();
     public void runOpMode() {
-        Hardware.hardwareMap();
+        Hardware.hardwareMap(this);
     }
         void initVuforia () {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();

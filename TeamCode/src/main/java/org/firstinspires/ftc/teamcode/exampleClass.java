@@ -12,7 +12,7 @@ public class exampleClass extends LinearOpMode {
     public Methods methods = new Methods();
     public Variables variables = new Variables();
     public void runOpMode() {
-        hardware.hardwareMap();
+        hardware.hardwareMap(this);
         waitForStart();
     }
 }

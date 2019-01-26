@@ -22,7 +22,7 @@ public class teleOpSingle extends LinearOpMode {
     public Hardware Hardware = new Hardware();
     @Override
     public void runOpMode() {
-        Hardware.hardwareMap();
+        Hardware.hardwareMap(this);
         waitForStart();
         Variables.runtime.reset();
         double speedlimiter = 0;

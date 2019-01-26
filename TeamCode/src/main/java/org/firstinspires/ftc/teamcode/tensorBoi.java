@@ -60,7 +60,7 @@ public class tensorBoi extends LinearOpMode {
     public Hardware Hardware = new Hardware();
     @Override
     public void runOpMode() {
-        Hardware.hardwareMap();
+        Hardware.hardwareMap(this);
         Methods.initVuforia();
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             Methods. initTfod();

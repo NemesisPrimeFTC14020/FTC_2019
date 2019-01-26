@@ -9,7 +9,7 @@ public class encoderTesting extends LinearOpMode {
     public Methods methods = new Methods();
     public Variables variables = new Variables();
     public void runOpMode() {
-        hardware.hardwareMap();
+        hardware.hardwareMap(this);
         waitForStart();
         methods.encoderDrive(variables.DRIVE_SPEED, 300, 300, 10);
     }
