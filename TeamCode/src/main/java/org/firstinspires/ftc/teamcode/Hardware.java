@@ -7,18 +7,16 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-@Disabled
-@Autonomous(name = "Hardware", group = "Concept")
-public class Hardware  extends LinearOpMode {
-        public void runOpMode() {
-        }
-        public void hardwareMap (LinearOpMode myOpMode) {
-            leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
-            rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
-            elevatorDrive = hardwareMap.get(DcMotor.class, "elevator_drive");
-            Markerservo = hardwareMap.get(Servo.class, "servo");
-            intakeServo = hardwareMap.get (Servo.class, "intake");
-            linearSlide = hardwareMap.get (DcMotor.class, "linear slider");
+import org.firstinspires.ftc.teamcode.motorTesting;
+
+public class Hardware {
+        static void hardwareMap (motorTesting myOpMode) {
+            myOpMode.leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
+            myOpMode.rightDrive = myOpMode.hardwareMap.get(DcMotor.class, "right_drive");
+            myOpMode.elevatorDrive = myOpMode.hardwareMap.get(DcMotor.class, "elevator_drive");
+            myOpMode.Markerservo = myOpMode.hardwareMap.get(Servo.class, "servo");
+            myOpMode.intakeServo = myOpMode.hardwareMap.get (Servo.class, "intake");
+            myOpMode.linearSlide = myOpMode.hardwareMap.get (DcMotor.class, "linear slider");
             //gyroParams
             BNO055IMU.Parameters parametersGyro = new BNO055IMU.Parameters();
             parametersGyro.angleUnit = BNO055IMU.AngleUnit.DEGREES;
@@ -27,16 +25,16 @@ public class Hardware  extends LinearOpMode {
             parametersGyro.loggingEnabled = true;
             parametersGyro.loggingTag = "IMU";
             parametersGyro.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
-            gyro = hardwareMap.get(BNO055IMU.class, "imu");
+            myOpMode.gyro = myOpMode.hardwareMap.get(BNO055IMU.class, "imu");
             //motor polarity
-            leftDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightDrive.setDirection(DcMotor.Direction.FORWARD);
-            elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
-            linearSlide.setDirection(DcMotor.Direction.FORWARD);
-            elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            gyro.initialize(parametersGyro);
-            int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+            myOpMode.leftDrive.setDirection(DcMotor.Direction.REVERSE);
+            myOpMode. rightDrive.setDirection(DcMotor.Direction.FORWARD);
+            myOpMode.elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
+            myOpMode.linearSlide.setDirection(DcMotor.Direction.FORWARD);
+            myOpMode.elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            myOpMode.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            myOpMode.gyro.initialize(parametersGyro);
+            int cameraMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", myOpMode.hardwareMap.appContext.getPackageName());
         }
     //Variables
     DcMotor leftDrive = null;
