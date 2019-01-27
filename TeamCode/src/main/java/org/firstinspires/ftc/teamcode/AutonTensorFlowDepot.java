@@ -59,31 +59,33 @@ public class AutonTensorFlowDepot extends LinearOpMode {
             Variables.tfod.activate();
         }
         boolean tFodDone = false;
-        while (opModeIsActive() && (tFodDone == false)) {
+        Methods.gyroTurn(Variables.BIG_TURN, -20);
+        while (opModeIsActive()) {
             if (Variables.tfod != null) {
-                // getUpdatedRecognitions() will return null if no new information is available since
-                // the last time that call was made.
-
-                int goldMineralX = -1;
-                int silverMineral1X = -1;
-                int silverMineral2X = -1;
-                final int fov = 78;
-                final float d_per_pix = (float) 0.040625;
-                Methods.gyroTurnTo(Variables.TURN_SPEED, 225);
-                sleep(500);
                 List<Recognition> updatedRecognitions = Variables.tfod.getUpdatedRecognitions();
+                Hardware.leftDrive.setPower(0.1);
+                Hardware.rightDrive.setPower(-0.1);
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
-                    sleep(1500);
-                    updatedRecognitions = Variables.tfod.getUpdatedRecognitions();
+                    int goldMineralX = -1;
+                    int silverMineral1X = -1;
+                    int silverMineral2X = -1;
+                    final int fov = 78;
+                    final float d_per_pix = (float) 0.040625;
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                            Hardware. leftDrive.setPower(0);
-                            Hardware.rightDrive.setPower(0);
-                            goldMineralX = (int) recognition.getLeft();
-                            telemetry.addLine("Skipper we did it, we found the gold mineral");
-                            telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
-                            telemetry.addData("Gold getRight Value: ", recognition.getRight());
+                            if (recognition.getLeft() == 0) {
+                                Hardware.leftDrive.setPower(0);
+                                Hardware.rightDrive.setPower(0);
+                                Methods.gyroTurn(Variables.BIG_TURN, 20);
+                            } else if (recognition.getRight() == 0) {
+                                Hardware.leftDrive.setPower(0);
+                                Hardware.rightDrive.setPower(0);
+                                Methods.gyroTurn(Variables.SMALL_TURN, -20);
+                            } else {
+                                Hardware.leftDrive.setPower(0);
+                                Hardware.rightDrive.setPower(0);
+                            }
                             float getleftval = (int) recognition.getLeft();
                             float getrightval = (int) recognition.getRight();
                             float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
@@ -93,78 +95,36 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                             float angle = h * d_per_pix;
                             telemetry.addData("the final angle lmao ", angle);
                             telemetry.update();
-                            //if (angle < 0) {
-                            //    angle = angle - 10;
-                            //}
-                            Methods.gyroTurn(Variables.TURN_SPEED, angle);
+                            Methods.gyroTurn(Variables.BIG_TURN, angle);
                             sleep(500);
                             Methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                            Methods.gyroTurn(Variables.TURN_SPEED, 55);
-                            Methods. encoderDrive(Variables.DRIVE_SPEED, 350, 350, 10);
-                            Hardware.markerServo.setPosition(1);
-                            sleep(1500);
-                            Methods.encoderDrive(Variables.DRIVE_SPEED, -200, -200, 20);
-                            tFodDone = true;
+                            sleep(500);
                         }
+                        break;
                     }
-                    if (tFodDone == false) {
-                        Methods. gyroTurnTo(Variables.TURN_SPEED, 135);
-                        sleep(500);
-                        updatedRecognitions = Variables.tfod.getUpdatedRecognitions();
-                        if (updatedRecognitions != null) {
-                            telemetry.addData("# Object Detected", updatedRecognitions.size());
-
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                                    Hardware. leftDrive.setPower(0);
-                                    Hardware.rightDrive.setPower(0);
-                                    goldMineralX = (int) recognition.getLeft();
-                                    telemetry.addLine("Skipper we did it, we found the gold mineral");
-                                    telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
-                                    telemetry.addData("Gold getRight Value: ", recognition.getRight());
-                                    float getleftval = (int) recognition.getLeft();
-                                    float getrightval = (int) recognition.getRight();
-                                    float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
-                                    telemetry.addData("Gold p Value that was calculated: ", p);
-                                    float h = (float) (p - (0.5 * 800));
-                                    telemetry.addData("h value calculated ", h);
-                                    float angle = h * d_per_pix;
-                                    telemetry.addData("the final angle lmao ", angle);
-                                    telemetry.update();
-                                    //if (angle < 0) {
-                                    //    angle = angle - 10;
-                                    //}
-                                    Methods.gyroTurn(Variables.TURN_SPEED, angle);
-                                    sleep(500);
-                                    Methods. encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                                    Methods.gyroTurn(Variables.TURN_SPEED, -55);
-                                    Methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 10);
-                                    Hardware.markerServo.setPosition(1);
-                                    sleep(1500);
-                                    Methods.encoderDrive(Variables.DRIVE_SPEED, -200, -200, 10);
-                                    sleep(500);
-                                    tFodDone = true;
-                                }
-                            }
-                        }
-                    }
-                    if (tFodDone == false) {
-                        Methods.gyroTurnTo(Variables.TURN_SPEED, 180);
-                        Methods.encoderDrive(Variables.DRIVE_SPEED, 650, 650, 5);
-                        Hardware.markerServo.setPosition(1);
-                        sleep(1500);
-                        Methods.encoderDrive(Variables.DRIVE_SPEED, -650, -650, 5);
-                    }
-
                     telemetry.update();
                 }
             }
         }
+
         if (Variables.tfod != null) {
             Variables.tfod.shutdown();
         }
         telemetry.addData("Tfod", "done");
         telemetry.update();
+        if (Methods.getHeading() >= 170 && Methods.getHeading() <= 190) {
+            telemetry.addLine("center");
+            telemetry.update();
+            //INSERT CENTER CODE HERE
+        } else if (Methods.getHeading() >= 170) {
+            telemetry.addLine("right");
+            telemetry.update();
+            //(INSERT RIGHT CODE HERE
+        } else if (Methods.getHeading() <= 190) {
+            telemetry.addLine("left");
+            telemetry.update();
+            //INSERT LEFT CODE HERE
+        }
 
 
     }
