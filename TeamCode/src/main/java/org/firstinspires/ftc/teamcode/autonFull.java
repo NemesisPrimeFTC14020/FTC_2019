@@ -1,20 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
 
@@ -22,30 +12,30 @@ import java.util.List;
 public class autonFull extends LinearOpMode {
 
     //public variables variables = new variables();
-    public Methods Methods = new Methods();
+    public Methods methods = new Methods();
     //public hardware hardware = new hardware();
 
     public void runOpMode() {
-        Methods.initVuforia();
+        methods.initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            Methods.initTfod();
+            methods.initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
 
         if (opModeIsActive()) {
-            if (Methods.variables.tfod != null) {
-                Methods.variables.tfod.activate();
+            if (methods.variables.tfod != null) {
+                methods.variables.tfod.activate();
             }
         }
-        Methods.gyroTurn(Variables.TURN_SPEED, -20);
+        methods.gyroTurn(Variables.TURN_SPEED, -20);
         boolean tfodDone = false;
 
-        if (Methods.variables.tfod != null) {
+        if (methods.variables.tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            List<Recognition> updatedRecognitions = Methods.variables.tfod.getUpdatedRecognitions();
+            List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -54,7 +44,7 @@ public class autonFull extends LinearOpMode {
                 final int fov = 78;
                 final float d_per_pix = (float) 0.040625;
                 for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(Methods.variables.LABEL_GOLD_MINERAL)) {
+                    if (recognition.getLabel().equals(methods.variables.LABEL_GOLD_MINERAL)) {
                         goldMineralX = (int) recognition.getLeft();
                         telemetry.addLine("Skipper we did it, we found the gold mineral");
                         telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
@@ -71,9 +61,9 @@ public class autonFull extends LinearOpMode {
 
                         tfodDone = false;
                         //turns at angle
-                        Methods.gyroTurn(Methods.variables.TURN_SPEED, angle - 5);
+                        methods.gyroTurn(methods.variables.TURN_SPEED, angle - 5);
                         sleep(500);
-                        Methods.encoderDrive(Methods.variables.DRIVE_SPEED, 350, 350, 5.0);
+                        methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 5.0);
 
                     }
 
@@ -84,12 +74,12 @@ public class autonFull extends LinearOpMode {
         }
 
         waitForStart();
-        telemetry.addData("heading:", Methods.getHeading());
+        telemetry.addData("heading:", methods.getHeading());
         telemetry.update();
-        Methods.elevatorDrive(1, 10, 8);// coming off the lander
-        Methods.hardware.gyro.initialize(Methods.hardware.gyro.getParameters());
-        Methods.hardware.markerServo.setPosition(1);
-        Methods.encoderDrive(Methods.variables.DRIVE_SPEED, -100, -100, 5.0);
+        methods.elevatorDrive(1, 10, 8);// coming off the lander
+        methods.hardware.gyro.initialize(methods.hardware.gyro.getParameters());
+        methods.hardware.markerServo.setPosition(1);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, -100, -100, 5.0);
 
     }
 

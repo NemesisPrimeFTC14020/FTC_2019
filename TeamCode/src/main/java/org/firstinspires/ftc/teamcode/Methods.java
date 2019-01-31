@@ -15,7 +15,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Disabled
-@Autonomous(name = "Methods", group = "Concept")
+@Autonomous(name = "methods", group = "Concept")
 public class Methods  extends LinearOpMode {
     public Variables variables = new Variables();
     public Hardware hardware = new Hardware();
@@ -205,5 +205,13 @@ public class Methods  extends LinearOpMode {
             hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         }
+    }
+    void driveTrainControl (double drive, double turn, DcMotor leftDrive, DcMotor rightDrive) {
+        double leftPower = 0;
+        double rightPower = 0;
+        leftPower = Math.pow(Range.clip(drive + turn, -1, 1),3);
+        rightPower = Math.pow(Range.clip(drive - turn, -1, 1),3);
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
     }
 }
