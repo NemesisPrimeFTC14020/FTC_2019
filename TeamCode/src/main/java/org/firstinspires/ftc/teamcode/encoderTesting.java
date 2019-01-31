@@ -3,7 +3,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name="encoderTest", group="Linear Opmode")
+@TeleOp(name="encoderTesting", group="Linear Opmode")
 public class encoderTesting extends LinearOpMode {
     public Methods methods = new Methods();
 

@@ -141,8 +141,8 @@ public class Methods  extends LinearOpMode {
     public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive) {
         double leftPower = 0;
         double rightPower = 0;
-        leftPower = Range.clip(drive + turn, -speedLimiter, speedLimiter);
-        rightPower = Range.clip(drive - turn, -speedLimiter, speedLimiter);
+        leftPower = Range.clip(drive + turn, -1, 1);
+        rightPower = Range.clip(drive - turn, -1, 1);
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
     }
