@@ -1,21 +1,9 @@
 package org.firstinspires.ftc.teamcode;
-        import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-        import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-        import com.qualcomm.robotcore.hardware.DcMotor;
-        import com.qualcomm.robotcore.hardware.DcMotorSimple;
-        import com.qualcomm.robotcore.hardware.Servo;
-        import com.qualcomm.robotcore.util.ElapsedTime;
-        import com.qualcomm.robotcore.util.Range;
 
-        import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-        import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-        import org.firstinspires.ftc.teamcode.Variables;
-        import org.firstinspires.ftc.teamcode.Hardware;
-        import org.firstinspires.ftc.teamcode.Methods;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-        import java.lang.reflect.Method;
-
-@TeleOp(name="roverRuckusTeleopSingle", group="Linear Opmode")
+@TeleOp(name="speed test", group="Linear Opmode")
 public class teleOpSingle extends LinearOpMode {
     public Variables Variables = new Variables();
     public Methods Methods = new Methods();
@@ -57,7 +45,6 @@ public class teleOpSingle extends LinearOpMode {
             telemetry.addData("servoPosition %7d", Hardware.intakeServo.getPosition());
             telemetry.addData ("leftPower", Hardware.leftDrive.getPower());
             telemetry.addData ("rightPower", Hardware.rightDrive.getPower());
-            telemetry.update();
             telemetry.update();
         }
     }
