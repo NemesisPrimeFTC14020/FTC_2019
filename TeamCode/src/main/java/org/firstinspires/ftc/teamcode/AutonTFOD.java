@@ -35,39 +35,37 @@ import org.firstinspires.ftc.teamcode.Methods;
 @Disabled
 @Autonomous(name="Auton Tfod", group="Minibot")
 public class AutonTFOD extends LinearOpMode {
-    public Variables Variables = new Variables();
-    public Methods Methods = new Methods();
-    public Hardware Hardware = new Hardware();
+    public Methods methods = new Methods();
     public void runOpMode() {
-        Methods.initVuforia();
-        Hardware.hardwareMap(this);
+        methods.initVuforia();
+        methods.hardware.hardwareMap(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();
-            Methods.initTfod();
+            methods.initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
         telemetry.addLine("Press play to start.");
         telemetry.update();
         waitForStart();
-        Variables.runtime.reset();
-        Methods.elevatorDrive(1, 8.5, 4);
-        Methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4);
-        Methods.elevatorDrive(1, -8.5, 4);
-        Methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4);
-        if (Variables.tfod != null) {
-            Variables.tfod.activate();
+        methods.variables.runtime.reset();
+        methods.elevatorDrive(1, 8.5, 4);
+        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4);
+        methods.elevatorDrive(1, -8.5, 4);
+        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4);
+        if (methods.variables.tfod != null) {
+            methods.variables.tfod.activate();
         }
-        Methods.gyroTurn(Variables.TURN_SPEED, -20);
+        methods.gyroTurn(Variables.TURN_SPEED, -20);
         boolean tFodDone = false;
         while (opModeIsActive() && tFodDone == false) {
-            if (Variables.tfod != null) {
+            if (methods.variables.tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
-                List<Recognition> updatedRecognitions = Variables.tfod.getUpdatedRecognitions();
-                Hardware.leftDrive.setPower(0.075);
-                Hardware.rightDrive.setPower(-0.075);
+                List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
+                methods.hardware.leftDrive.setPower(0.075);
+                methods.hardware.rightDrive.setPower(-0.075);
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -78,8 +76,8 @@ public class AutonTFOD extends LinearOpMode {
                     final float d_per_pix = (float) 0.040625;
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                            Hardware.leftDrive.setPower(0);
-                            Hardware.rightDrive.setPower(0);
+                            methods.hardware.leftDrive.setPower(0);
+                            methods.hardware.rightDrive.setPower(0);
                             goldMineralX = (int) recognition.getLeft();
                             telemetry.addLine("Skipper we did it, we found the gold mineral");
                             telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
@@ -98,18 +96,18 @@ public class AutonTFOD extends LinearOpMode {
                             //    angle = angle - 10;
                             //}
 
-                            Methods.gyroTurn(Variables.TURN_SPEED, angle);
+                            methods.gyroTurn(Variables.TURN_SPEED, angle);
                             sleep(500);
-                            Methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                            Methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
+                            methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
+                            methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
                             sleep(500);
                         }
                     }
                 }
             }
         }
-        if (Variables.tfod != null) {
-            Variables.tfod.shutdown();
+        if (methods.variables.tfod != null) {
+            methods.variables.tfod.shutdown();
         }
         telemetry.addData("Tfod", "done");
         telemetry.update();

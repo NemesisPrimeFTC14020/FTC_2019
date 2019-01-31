@@ -6,14 +6,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="Motor Testing", group="Linear Opmode")
 public class motorTesting extends LinearOpMode {
-    public Variables Variables = new Variables();
-    public Methods Methods = new Methods();
-    public Hardware Hardware = new Hardware();
+    public Methods methods = new Methods();
     @Override
     public void runOpMode() {
-        Hardware.hardwareMap(this);
+        methods.hardware.hardwareMap(this);
         waitForStart();
-        Variables.runtime.reset();
+        methods.variables.runtime.reset();
         DcMotor motor = null;
         motor = hardwareMap.get(DcMotor.class, "motorboi");
         motor.setDirection(DcMotor.Direction.FORWARD);

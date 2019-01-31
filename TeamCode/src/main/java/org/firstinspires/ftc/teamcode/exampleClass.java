@@ -8,11 +8,9 @@ import org.firstinspires.ftc.teamcode.Methods;
 import org.firstinspires.ftc.teamcode.Variables;
 @TeleOp(name="EXAMPLE", group="Linear Opmode")
 public class exampleClass extends LinearOpMode {
-    public Hardware hardware = new Hardware();
     public Methods methods = new Methods();
-    public Variables variables = new Variables();
     public void runOpMode() {
-        hardware.hardwareMap(this);
+        methods.hardware.hardwareMap(this);
         waitForStart();
     }
 }

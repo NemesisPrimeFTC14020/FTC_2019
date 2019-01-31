@@ -21,9 +21,9 @@ import java.util.List;
 @Autonomous(name = "autonFull", group = "Minibot")
 public class autonFull extends LinearOpMode {
 
-    //public Variables Variables = new Variables();
+    //public variables variables = new variables();
     public Methods Methods = new Methods();
-    //public Hardware Hardware = new Hardware();
+    //public hardware hardware = new hardware();
 
     public void runOpMode() {
         Methods.initVuforia();
@@ -35,17 +35,17 @@ public class autonFull extends LinearOpMode {
         }
 
         if (opModeIsActive()) {
-            if (Methods.Variables.tfod != null) {
-                Methods.Variables.tfod.activate();
+            if (Methods.variables.tfod != null) {
+                Methods.variables.tfod.activate();
             }
         }
         Methods.gyroTurn(Variables.TURN_SPEED, -20);
         boolean tfodDone = false;
 
-        if (Methods.Variables.tfod != null) {
+        if (Methods.variables.tfod != null) {
             // getUpdatedRecognitions() will return null if no new information is available since
             // the last time that call was made.
-            List<Recognition> updatedRecognitions = Methods.Variables.tfod.getUpdatedRecognitions();
+            List<Recognition> updatedRecognitions = Methods.variables.tfod.getUpdatedRecognitions();
             if (updatedRecognitions != null) {
                 telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -54,7 +54,7 @@ public class autonFull extends LinearOpMode {
                 final int fov = 78;
                 final float d_per_pix = (float) 0.040625;
                 for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(Methods.Variables.LABEL_GOLD_MINERAL)) {
+                    if (recognition.getLabel().equals(Methods.variables.LABEL_GOLD_MINERAL)) {
                         goldMineralX = (int) recognition.getLeft();
                         telemetry.addLine("Skipper we did it, we found the gold mineral");
                         telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
@@ -71,9 +71,9 @@ public class autonFull extends LinearOpMode {
 
                         tfodDone = false;
                         //turns at angle
-                        Methods.gyroTurn(Methods.Variables.TURN_SPEED, angle - 5);
+                        Methods.gyroTurn(Methods.variables.TURN_SPEED, angle - 5);
                         sleep(500);
-                        Methods.encoderDrive(Methods.Variables.DRIVE_SPEED, 350, 350, 5.0);
+                        Methods.encoderDrive(Methods.variables.DRIVE_SPEED, 350, 350, 5.0);
 
                     }
 
@@ -87,9 +87,9 @@ public class autonFull extends LinearOpMode {
         telemetry.addData("heading:", Methods.getHeading());
         telemetry.update();
         Methods.elevatorDrive(1, 10, 8);// coming off the lander
-        Methods.Hardware.gyro.initialize(Methods.Hardware.gyro.getParameters());
-        Methods.Hardware.markerServo.setPosition(1);
-        Methods.encoderDrive(Methods.Variables.DRIVE_SPEED, -100, -100, 5.0);
+        Methods.hardware.gyro.initialize(Methods.hardware.gyro.getParameters());
+        Methods.hardware.markerServo.setPosition(1);
+        Methods.encoderDrive(Methods.variables.DRIVE_SPEED, -100, -100, 5.0);
 
     }
 

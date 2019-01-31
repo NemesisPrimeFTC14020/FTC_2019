@@ -17,14 +17,12 @@ package org.firstinspires.ftc.teamcode;
 
 @TeleOp(name="roverRuckusTeleopSingle", group="Linear Opmode")
 public class teleOpSingle extends LinearOpMode {
-    public Variables Variables = new Variables();
-    public Methods Methods = new Methods();
-    public Hardware Hardware = new Hardware();
+    public Methods methods = new Methods();
     @Override
     public void runOpMode() {
-        Hardware.hardwareMap(this);
+        methods.hardware.hardwareMap(this);
         waitForStart();
-        Variables.runtime.reset();
+        methods.variables.runtime.reset();
         double speedlimiter = 0;
         while (opModeIsActive()) {
             if (gamepad1.y) {
@@ -33,30 +31,30 @@ public class teleOpSingle extends LinearOpMode {
                 speedlimiter = 0.5;
             }
             if (gamepad1.a) {
-                Hardware.elevatorDrive.setPower(1);
+                methods.hardware.elevatorDrive.setPower(1);
             } else if (gamepad1.b) {
-                Hardware.elevatorDrive.setPower(-1);
+                methods.hardware.elevatorDrive.setPower(-1);
             } else {
-                Hardware.elevatorDrive.setPower(0);
+                methods.hardware.elevatorDrive.setPower(0);
             }
             if (gamepad1.right_trigger >= 0.2) {
-                Hardware.linearSlide.setPower(1);
+                methods.hardware.linearSlide.setPower(1);
             } else if (gamepad1.left_trigger >= 0.2) {
-                Hardware.linearSlide.setPower(-1);
+                methods.hardware.linearSlide.setPower(-1);
             } else {
-                Hardware.linearSlide.setPower(0);
+                methods.hardware.linearSlide.setPower(0);
             } if (gamepad1.x) {
-                Variables.servoPos = !Variables.servoPos;
-            } if (Variables.servoPos) {
-                Hardware.intakeServo.setPosition(1);
+                methods.variables.servoPos = !methods.variables.servoPos;
+            } if (methods.variables.servoPos) {
+                methods.hardware.intakeServo.setPosition(1);
             } else {
-                Hardware.intakeServo.setPosition(0);
+                methods.hardware.intakeServo.setPosition(0);
             }
-            Methods.teleopInput(gamepad1.left_stick_y,gamepad1.right_stick_x,speedlimiter, Hardware.leftDrive, Hardware.rightDrive);
-            telemetry.addData("elevatorPosition %7d", Hardware.elevatorDrive.getCurrentPosition());
-            telemetry.addData("servoPosition %7d", Hardware.intakeServo.getPosition());
-            telemetry.addData ("leftPower", Hardware.leftDrive.getPower());
-            telemetry.addData ("rightPower", Hardware.rightDrive.getPower());
+            methods.teleopInput(gamepad1.left_stick_y,gamepad1.right_stick_x,speedlimiter, methods.hardware.leftDrive, methods.hardware.rightDrive);
+            telemetry.addData("elevatorPosition %7d", methods.hardware.elevatorDrive.getCurrentPosition());
+            telemetry.addData("servoPosition %7d", methods.hardware.intakeServo.getPosition());
+            telemetry.addData ("leftPower", methods.hardware.leftDrive.getPower());
+            telemetry.addData ("rightPower", methods.hardware.rightDrive.getPower());
             telemetry.update();
             telemetry.update();
         }

@@ -5,67 +5,48 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.Variables;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.Variables;
-
-import java.util.List;
 @Disabled
 @Autonomous(name = "Methods", group = "Concept")
 public class Methods  extends LinearOpMode {
-    public Variables Variables = new Variables();
-    public Hardware Hardware = new Hardware();
+    public Variables variables = new Variables();
+    public Hardware hardware = new Hardware();
     public void runOpMode() {
-        Hardware.hardwareMap(this);
+        hardware.hardwareMap(this);
     }
         void initVuforia () {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-            parameters.vuforiaLicenseKey = Variables.VUFORIA_KEY;
+            parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
             parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
-            Variables.vuforia = ClassFactory.getInstance().createVuforia(parameters);
+            variables.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         }
 
         void initTfod () {
             int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
-            Variables.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, Variables.vuforia);
-            Variables.tfod.loadModelFromAsset(Variables.TFOD_MODEL_ASSET, Variables.LABEL_GOLD_MINERAL, Variables.LABEL_SILVER_MINERAL);
+            variables.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, variables.vuforia);
+            variables.tfod.loadModelFromAsset(variables.TFOD_MODEL_ASSET, variables.LABEL_GOLD_MINERAL, variables.LABEL_SILVER_MINERAL);
         }
 
         public void gyroTurn ( double speed, double angle){
             double angleTarget;
             angleTarget = getHeading() - angle;
-            while (opModeIsActive() && !onHeading(speed, angleTarget, Variables.P_TURN_COEFF)) {
+            while (opModeIsActive() && !onHeading(speed, angleTarget, variables.P_TURN_COEFF)) {
                 telemetry.update();
             }
         }
 
         public void gyroTurnTo ( double speed, double angle){
-            while (opModeIsActive() && !onHeading(speed, angle, Variables.P_TURN_COEFF)) {
+            while (opModeIsActive() && !onHeading(speed, angle, variables.P_TURN_COEFF)) {
                 telemetry.update();
             }
         }
@@ -74,11 +55,11 @@ public class Methods  extends LinearOpMode {
             ElapsedTime holdTimer = new ElapsedTime();
             holdTimer.reset();
             while (opModeIsActive() && (holdTimer.time() < holdTime)) {
-                onHeading(speed, angle, Variables.P_TURN_COEFF);
+                onHeading(speed, angle, variables.P_TURN_COEFF);
                 telemetry.update();
             }
-            Hardware.leftDrive.setPower(0);
-            Hardware.rightDrive.setPower(0);
+            hardware.leftDrive.setPower(0);
+            hardware.rightDrive.setPower(0);
         }
 
         boolean onHeading ( double speed, double angle, double PCoeff){
@@ -88,7 +69,7 @@ public class Methods  extends LinearOpMode {
             double leftSpeed;
             double rightSpeed;
             error = getError(angle);
-            if (Math.abs(error) <= Variables.HEADING_THRESHOLD) {
+            if (Math.abs(error) <= variables.HEADING_THRESHOLD) {
                 steer = 0.0;
                 leftSpeed = 0.0;
                 rightSpeed = 0.0;
@@ -104,8 +85,8 @@ public class Methods  extends LinearOpMode {
                 rightSpeed = signMultiplier * Range.clip(Math.abs(speed * steer), 0.2, 1);
                 leftSpeed = -rightSpeed;
             }
-            Hardware.leftDrive.setPower(leftSpeed);
-            Hardware.rightDrive.setPower(rightSpeed);
+            hardware.leftDrive.setPower(leftSpeed);
+            hardware.rightDrive.setPower(rightSpeed);
             telemetry.addData("Target", "%5.2f", angle);
             telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
             telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
@@ -125,7 +106,7 @@ public class Methods  extends LinearOpMode {
         }
 
         public double getHeading () {
-            Orientation angles = Hardware.gyro.getAngularOrientation();
+            Orientation angles = hardware.gyro.getAngularOrientation();
             return angles.firstAngle + 180;
         }
 
@@ -133,28 +114,28 @@ public class Methods  extends LinearOpMode {
             int newLeftTarget;
             int newRightTarget;
             if (opModeIsActive()) {
-                newLeftTarget = Hardware.leftDrive.getCurrentPosition() - (int) (leftMM * Variables.COUNTS_PER_MM);
-                newRightTarget = Hardware.rightDrive.getCurrentPosition() - (int) (rightMM * Variables.COUNTS_PER_MM);
-                Hardware.leftDrive.setTargetPosition(newLeftTarget);
-                Hardware.rightDrive.setTargetPosition(newRightTarget);
-                Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Variables.runtime.reset();
-                Hardware.leftDrive.setPower(Math.abs(speed));
-                Hardware. rightDrive.setPower(Math.abs(speed));
+                newLeftTarget = hardware.leftDrive.getCurrentPosition() - (int) (leftMM * variables.COUNTS_PER_MM);
+                newRightTarget = hardware.rightDrive.getCurrentPosition() - (int) (rightMM * variables.COUNTS_PER_MM);
+                hardware.leftDrive.setTargetPosition(newLeftTarget);
+                hardware.rightDrive.setTargetPosition(newRightTarget);
+                hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                variables.runtime.reset();
+                hardware.leftDrive.setPower(Math.abs(speed));
+                hardware. rightDrive.setPower(Math.abs(speed));
                 while (opModeIsActive() &&
-                        (Variables.runtime.seconds() < timeoutS) &&
-                        (Hardware.leftDrive.isBusy() && Hardware.rightDrive.isBusy())) {
+                        (variables.runtime.seconds() < timeoutS) &&
+                        (hardware.leftDrive.isBusy() && hardware.rightDrive.isBusy())) {
                     telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                     telemetry.addData("Path2", "Running at %7d :%7d",
-                            Hardware.leftDrive.getCurrentPosition(),
-                            Hardware.rightDrive.getCurrentPosition());
+                            hardware.leftDrive.getCurrentPosition(),
+                            hardware.rightDrive.getCurrentPosition());
                     telemetry.update();
                 }
-                Hardware.leftDrive.setPower(0);
-                Hardware.rightDrive.setPower(0);
-                Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                hardware.leftDrive.setPower(0);
+                hardware.rightDrive.setPower(0);
+                hardware.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
     public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive) {
@@ -168,22 +149,22 @@ public class Methods  extends LinearOpMode {
     public void elavatorMove(double speed, double inches, double timeoutS) {
         int newTarget;
         if (opModeIsActive()) {
-            newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (inches * Variables.COUNTS_PER_INCH_ELEVATOR);
-            Hardware.elevatorDrive.setTargetPosition(newTarget);
-            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            Hardware.elevatorDrive.setPower(Math.abs(1));
-            Variables.runtime.reset();
+            newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
+            hardware.elevatorDrive.setTargetPosition(newTarget);
+            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hardware.elevatorDrive.setPower(Math.abs(1));
+            variables.runtime.reset();
             while (opModeIsActive() &&
-                    (Variables.runtime.seconds() < timeoutS) &&
-                    (Hardware.elevatorDrive.isBusy())) {
+                    (variables.runtime.seconds() < timeoutS) &&
+                    (hardware.elevatorDrive.isBusy())) {
                 telemetry.addData("Path1", "Running to %7d,", newTarget);
                 telemetry.update();
             }
 
-            Hardware.leftDrive.setPower(0);
-            Hardware. rightDrive.setPower(0);
-            Hardware. elevatorDrive.setPower(0);
-            Hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            hardware.leftDrive.setPower(0);
+            hardware. rightDrive.setPower(0);
+            hardware. elevatorDrive.setPower(0);
+            hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void elevatorDrive(double speed, double elevatorDis, double timeoutS) {
@@ -193,15 +174,15 @@ public class Methods  extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (elevatorDis * Variables.COUNTS_PER_INCH_ELEVATOR);
-            Hardware.elevatorDrive.setTargetPosition(newTarget);
+            newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (elevatorDis * variables.COUNTS_PER_INCH_ELEVATOR);
+            hardware.elevatorDrive.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
-            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
-            Variables.runtime.reset();
-            Hardware.elevatorDrive.setPower(Math.abs(speed));
+            variables.runtime.reset();
+            hardware.elevatorDrive.setPower(Math.abs(speed));
 
 
             // keep looping while we are still active, and there is time left, and both motors are running.
@@ -211,17 +192,17 @@ public class Methods  extends LinearOpMode {
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
-                    (Variables.runtime.seconds() < timeoutS) &&
-                    (Hardware.elevatorDrive.isBusy())) {
+                    (variables.runtime.seconds() < timeoutS) &&
+                    (hardware.elevatorDrive.isBusy())) {
                 //if (digitalTouch.getState()) {
                 //  elevatorDrive.setPower(0);
                 //}
             }
             // Stop all motion;
-            Hardware.elevatorDrive.setPower(0);
+            hardware.elevatorDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         }
     }

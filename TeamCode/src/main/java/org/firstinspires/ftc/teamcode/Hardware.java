@@ -35,7 +35,7 @@ public class Hardware {
             elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             gyro.initialize(parametersGyro);
         }
-    //Variables
+    //variables
     DcMotor leftDrive = null;
     DcMotor rightDrive = null;
     BNO055IMU gyro;

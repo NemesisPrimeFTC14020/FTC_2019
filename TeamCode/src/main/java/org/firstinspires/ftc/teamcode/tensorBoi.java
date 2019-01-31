@@ -55,29 +55,27 @@ import org.firstinspires.ftc.teamcode.Methods;
 @Autonomous(name = "Tensorflow", group = "Concept")
 
 public class tensorBoi extends LinearOpMode {
-    public Variables Variables = new Variables();
-    public Methods Methods = new Methods();
-    public Hardware Hardware = new Hardware();
+    public Methods methods = new Methods();
     @Override
     public void runOpMode() {
-        Hardware.hardwareMap(this);
-        Methods.initVuforia();
+        methods.hardware.hardwareMap(this);
+        methods.initVuforia();
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            Methods. initTfod();
+            methods.initTfod();
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
         waitForStart();
         if (opModeIsActive()) {
-            if (Variables.tfod != null) {
-                Variables.tfod.activate();
+            if (methods.variables.tfod != null) {
+                methods.variables.tfod.activate();
             }
-            Methods.gyroTurn(Variables.BIG_TURN, -20);
+            methods.gyroTurn(Variables.BIG_TURN, -20);
             while (opModeIsActive()) {
-                if (Variables.tfod != null) {
-                    List<Recognition> updatedRecognitions = Variables.tfod.getUpdatedRecognitions();
-                    Hardware.leftDrive.setPower(0.1);
-                    Hardware.rightDrive.setPower(-0.1);
+                if (methods.variables.tfod != null) {
+                    List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
+                    methods.hardware.leftDrive.setPower(0.1);
+                    methods.hardware.rightDrive.setPower(-0.1);
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
                         int goldMineralX = -1;
@@ -88,16 +86,16 @@ public class tensorBoi extends LinearOpMode {
                         for (Recognition recognition : updatedRecognitions) {
                             if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
                                 if (recognition.getLeft() == 0) {
-                                    Hardware.leftDrive.setPower(0);
-                                    Hardware.rightDrive.setPower(0);
-                                    Methods.gyroTurn(Variables.BIG_TURN, 20);
+                                    methods.hardware.leftDrive.setPower(0);
+                                    methods.hardware.rightDrive.setPower(0);
+                                    methods.gyroTurn(Variables.BIG_TURN, 20);
                                 } else if (recognition.getRight() == 0) {
-                                    Hardware.leftDrive.setPower(0);
-                                    Hardware.rightDrive.setPower(0);
-                                    Methods.gyroTurn(Variables.SMALL_TURN, -20);
+                                    methods.hardware.leftDrive.setPower(0);
+                                    methods.hardware.rightDrive.setPower(0);
+                                    methods.gyroTurn(Variables.SMALL_TURN, -20);
                                 } else {
-                                    Hardware.leftDrive.setPower(0);
-                                    Hardware.rightDrive.setPower(0);
+                                    methods.hardware.leftDrive.setPower(0);
+                                    methods.hardware.rightDrive.setPower(0);
                                 }
                                 float getleftval = (int) recognition.getLeft();
                                 float getrightval = (int) recognition.getRight();
@@ -108,10 +106,10 @@ public class tensorBoi extends LinearOpMode {
                                 float angle = h * d_per_pix;
                                 telemetry.addData("the final angle lmao ", angle);
                                 telemetry.update();
-                                Methods.gyroTurn(Variables.BIG_TURN, angle);
+                                methods.gyroTurn(Variables.BIG_TURN, angle);
                                 sleep(500);
-                                Methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                                Methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
+                                methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
+                                methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
                                 sleep(500);
                             }
                             break;
@@ -121,8 +119,8 @@ public class tensorBoi extends LinearOpMode {
                 }
             }
         }
-        if (Variables.tfod != null) {
-            Variables.tfod.shutdown();
+        if (methods.variables.tfod != null) {
+            methods.variables.tfod.shutdown();
         }
     }
 }
