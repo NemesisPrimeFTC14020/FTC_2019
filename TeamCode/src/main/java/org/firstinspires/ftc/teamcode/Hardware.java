@@ -10,12 +10,12 @@ import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 public class Hardware {
 
-        public void hardwareMap (LinearOpMode myOpMode) {
+        public void initHardware(LinearOpMode myOpMode) {
             leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
             rightDrive = myOpMode.hardwareMap.get(DcMotor.class, "right_drive");
             elevatorDrive = myOpMode.hardwareMap.get(DcMotor.class, "elevator_drive");
             Markerservo = myOpMode.hardwareMap.get(Servo.class, "servo");
-            // intakeServo = myOpMode.hardwareMap.get (Servo.class, "intake");
+            // intakeServo = myOpMode.initHardware.get (Servo.class, "intake");
             linearSlide = myOpMode.hardwareMap.get (DcMotor.class, "linear_drive");
             //gyroParams
             BNO055IMU.Parameters parametersGyro = new BNO055IMU.Parameters();

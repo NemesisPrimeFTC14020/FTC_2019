@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 @Autonomous(name = "methods", group = "Concept")
 public class Methods {
     public Variables variables = new Variables();
-    public Hardware hardware = new Hardware();
+    public Hardware Hardware = new Hardware();
         void initVuforia (LinearOpMode myOpMode) {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
             parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
@@ -55,8 +55,8 @@ public class Methods {
                 onHeading(speed, angle, variables.P_TURN_COEFF, myOpMode);
                 myOpMode.telemetry.update();
             }
-            hardware.leftDrive.setPower(0);
-            hardware.rightDrive.setPower(0);
+            Hardware.leftDrive.setPower(0);
+            Hardware.rightDrive.setPower(0);
         }
 
         boolean onHeading ( double speed, double angle, double PCoeff, LinearOpMode myOpMode){
@@ -82,8 +82,8 @@ public class Methods {
                 rightSpeed = signMultiplier * Range.clip(Math.abs(speed * steer), 0.2, 1);
                 leftSpeed = -rightSpeed;
             }
-            hardware.leftDrive.setPower(leftSpeed);
-            hardware.rightDrive.setPower(rightSpeed);
+            Hardware.leftDrive.setPower(leftSpeed);
+            Hardware.rightDrive.setPower(rightSpeed);
             myOpMode.telemetry.addData("Target", "%5.2f", angle);
             myOpMode.telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
             myOpMode.telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
@@ -103,7 +103,7 @@ public class Methods {
         }
 
         public double getHeading (LinearOpMode myOpMode) {
-            Orientation angles = hardware.gyro.getAngularOrientation();
+            Orientation angles = Hardware.gyro.getAngularOrientation();
             return angles.firstAngle + 180;
         }
 
@@ -111,28 +111,28 @@ public class Methods {
             int newLeftTarget;
             int newRightTarget;
             if (myOpMode.opModeIsActive()) {
-                newLeftTarget = hardware.leftDrive.getCurrentPosition() - (int) (leftMM * variables.COUNTS_PER_MM);
-                newRightTarget = hardware.rightDrive.getCurrentPosition() - (int) (rightMM * variables.COUNTS_PER_MM);
-                hardware.leftDrive.setTargetPosition(newLeftTarget);
-                hardware.rightDrive.setTargetPosition(newRightTarget);
-                hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                newLeftTarget = Hardware.leftDrive.getCurrentPosition() - (int) (leftMM * variables.COUNTS_PER_MM);
+                newRightTarget = Hardware.rightDrive.getCurrentPosition() - (int) (rightMM * variables.COUNTS_PER_MM);
+                Hardware.leftDrive.setTargetPosition(newLeftTarget);
+                Hardware.rightDrive.setTargetPosition(newRightTarget);
+                Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 variables.runtime.reset();
-                hardware.leftDrive.setPower(Math.abs(speed));
-                hardware. rightDrive.setPower(Math.abs(speed));
+                Hardware.leftDrive.setPower(Math.abs(speed));
+                Hardware. rightDrive.setPower(Math.abs(speed));
                 while (myOpMode.opModeIsActive() &&
                         (variables.runtime.seconds() < timeoutS) &&
-                        (hardware.leftDrive.isBusy() && hardware.rightDrive.isBusy())) {
+                        (Hardware.leftDrive.isBusy() && Hardware.rightDrive.isBusy())) {
                     myOpMode.telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
                     myOpMode.telemetry.addData("Path2", "Running at %7d :%7d",
-                            hardware.leftDrive.getCurrentPosition(),
-                            hardware.rightDrive.getCurrentPosition());
+                            Hardware.leftDrive.getCurrentPosition(),
+                            Hardware.rightDrive.getCurrentPosition());
                     myOpMode.telemetry.update();
                 }
-                hardware.leftDrive.setPower(0);
-                hardware.rightDrive.setPower(0);
-                hardware.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Hardware.leftDrive.setPower(0);
+                Hardware.rightDrive.setPower(0);
+                Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
     public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
@@ -146,22 +146,22 @@ public class Methods {
     public void elavatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
         if (myOpMode.opModeIsActive()) {
-            newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
-            hardware.elevatorDrive.setTargetPosition(newTarget);
-            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            hardware.elevatorDrive.setPower(Math.abs(1));
+            newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
+            Hardware.elevatorDrive.setTargetPosition(newTarget);
+            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Hardware.elevatorDrive.setPower(Math.abs(1));
             variables.runtime.reset();
             while (myOpMode.opModeIsActive() &&
                     (variables.runtime.seconds() < timeoutS) &&
-                    (hardware.elevatorDrive.isBusy())) {
+                    (Hardware.elevatorDrive.isBusy())) {
                 myOpMode.telemetry.addData("Path1", "Running to %7d,", newTarget);
                 myOpMode.telemetry.update();
             }
 
-            hardware.leftDrive.setPower(0);
-            hardware. rightDrive.setPower(0);
-            hardware. elevatorDrive.setPower(0);
-            hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Hardware.leftDrive.setPower(0);
+            Hardware. rightDrive.setPower(0);
+            Hardware. elevatorDrive.setPower(0);
+            Hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void elevatorDrive(double speed, double elevatorDis, double timeoutS, LinearOpMode myOpMode) {
@@ -171,15 +171,15 @@ public class Methods {
         if (myOpMode.opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (elevatorDis * variables.COUNTS_PER_INCH_ELEVATOR);
-            hardware.elevatorDrive.setTargetPosition(newTarget);
+            newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (elevatorDis * variables.COUNTS_PER_INCH_ELEVATOR);
+            Hardware.elevatorDrive.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
-            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             variables.runtime.reset();
-            hardware.elevatorDrive.setPower(Math.abs(speed));
+            Hardware.elevatorDrive.setPower(Math.abs(speed));
 
 
             // keep looping while we are still active, and there is time left, and both motors are running.
@@ -190,16 +190,16 @@ public class Methods {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (myOpMode.opModeIsActive() &&
                     (variables.runtime.seconds() < timeoutS) &&
-                    (hardware.elevatorDrive.isBusy())) {
+                    (Hardware.elevatorDrive.isBusy())) {
                 //if (digitalTouch.getState()) {
                 //  elevatorDrive.setPower(0);
                 //}
             }
             // Stop all motion;
-            hardware.elevatorDrive.setPower(0);
+            Hardware.elevatorDrive.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         }
     }

@@ -9,7 +9,7 @@ public class motorTesting extends LinearOpMode {
     public Methods methods = new Methods();
     @Override
     public void runOpMode() {
-        methods.hardware.hardwareMap(this);
+        methods.Hardware.initHardware(this);
         waitForStart();
         methods.variables.runtime.reset();
         DcMotor motor = null;

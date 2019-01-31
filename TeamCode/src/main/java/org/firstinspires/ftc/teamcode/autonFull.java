@@ -13,7 +13,7 @@ public class autonFull extends LinearOpMode {
 
     //public variables variables = new variables();
     public Methods methods = new Methods();
-    //public hardware hardware = new hardware();
+    //public Hardware Hardware = new Hardware();
 
     public void runOpMode() {
         methods.initVuforia(this);
@@ -77,8 +77,8 @@ public class autonFull extends LinearOpMode {
         telemetry.addData("heading:", methods.getHeading(this));
         telemetry.update();
         methods.elevatorDrive(1, 10, 8, this);// coming off the lander
-        methods.hardware.gyro.initialize(methods.hardware.gyro.getParameters());
-        methods.hardware.markerServo.setPosition(1);
+        methods.Hardware.gyro.initialize(methods.Hardware.gyro.getParameters());
+        methods.Hardware.markerServo.setPosition(1);
         methods.encoderDrive(methods.variables.DRIVE_SPEED, -100, -100, 5.0, this);
 
     }

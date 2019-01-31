@@ -8,7 +8,7 @@ public class spark extends LinearOpMode {
     public Methods methods = new Methods();
 
     public void runOpMode() {
-        methods.hardware.hardwareMap(this);
+        methods.Hardware.initHardware(this);
         waitForStart();
 
     }

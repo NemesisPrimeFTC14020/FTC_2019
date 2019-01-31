@@ -1,23 +1,9 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
-import org.firstinspires.ftc.teamcode.Variables;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.Methods;
 
 import java.util.List;
 
@@ -26,6 +12,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
     public Methods methods = new Methods();
     public void runOpMode() {
         methods.initVuforia(this);
+        methods.Hardware.initHardware(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();
@@ -61,8 +48,8 @@ public class AutonTensorFlowDepot extends LinearOpMode {
         while (opModeIsActive()) {
             if (methods.variables.tfod != null) {
                 List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
-                methods.hardware.leftDrive.setPower(0.1);
-                methods.hardware.rightDrive.setPower(-0.1);
+                methods.Hardware.leftDrive.setPower(0.1);
+                methods.Hardware.rightDrive.setPower(-0.1);
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
                     int goldMineralX = -1;
@@ -73,16 +60,16 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
                             if (recognition.getLeft() == 0) {
-                                methods.hardware.leftDrive.setPower(0);
-                                methods.hardware.rightDrive.setPower(0);
+                                methods.Hardware.leftDrive.setPower(0);
+                                methods.Hardware.rightDrive.setPower(0);
                                 methods.gyroTurn(Variables.BIG_TURN, 20, this);
                             } else if (recognition.getRight() == 0) {
-                                methods.hardware.leftDrive.setPower(0);
-                                methods.hardware.rightDrive.setPower(0);
+                                methods.Hardware.leftDrive.setPower(0);
+                                methods.Hardware.rightDrive.setPower(0);
                                 methods.gyroTurn(Variables.SMALL_TURN, -20, this);
                             } else {
-                                methods.hardware.leftDrive.setPower(0);
-                                methods.hardware.rightDrive.setPower(0);
+                                methods.Hardware.leftDrive.setPower(0);
+                                methods.Hardware.rightDrive.setPower(0);
                             }
                             float getleftval = (int) recognition.getLeft();
                             float getrightval = (int) recognition.getRight();

@@ -1,44 +1,20 @@
 package org.firstinspires.ftc.teamcode;
-import com.qualcomm.hardware.bosch.BNO055IMU;
-import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
-import org.firstinspires.ftc.teamcode.Variables;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.Methods;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
-import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import org.firstinspires.ftc.teamcode.Variables;
-import org.firstinspires.ftc.teamcode.Hardware;
-import org.firstinspires.ftc.teamcode.Methods;
 @Disabled
 @Autonomous(name="Auton Tfod", group="Minibot")
 public class AutonTFOD extends LinearOpMode {
     public Methods methods = new Methods();
     public void runOpMode() {
         methods.initVuforia(this);
-        methods.hardware.hardwareMap(this);
+        methods.Hardware.initHardware(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();
@@ -64,8 +40,8 @@ public class AutonTFOD extends LinearOpMode {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
                 List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
-                methods.hardware.leftDrive.setPower(0.075);
-                methods.hardware.rightDrive.setPower(-0.075);
+                methods.Hardware.leftDrive.setPower(0.075);
+                methods.Hardware.rightDrive.setPower(-0.075);
                 if (updatedRecognitions != null) {
                     telemetry.addData("# Object Detected", updatedRecognitions.size());
 
@@ -76,8 +52,8 @@ public class AutonTFOD extends LinearOpMode {
                     final float d_per_pix = (float) 0.040625;
                     for (Recognition recognition : updatedRecognitions) {
                         if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                            methods.hardware.leftDrive.setPower(0);
-                            methods.hardware.rightDrive.setPower(0);
+                            methods.Hardware.leftDrive.setPower(0);
+                            methods.Hardware.rightDrive.setPower(0);
                             goldMineralX = (int) recognition.getLeft();
                             telemetry.addLine("Skipper we did it, we found the gold mineral");
                             telemetry.addData("Gold getLeft Value: ", recognition.getLeft());

@@ -9,7 +9,7 @@ public class bigspeed extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        methods.hardware.hardwareMap(this);
+        methods.Hardware.initHardware(this);
         waitForStart();
         methods.variables.runtime.reset();
         double speedLimiter = 0;
@@ -28,30 +28,30 @@ public class bigspeed extends LinearOpMode {
                 speedLimiter = 0;
             }
             if (gamepad1.a) {
-                methods.hardware.elevatorDrive.setPower(1);
+                methods.Hardware.elevatorDrive.setPower(1);
             } else if (gamepad1.b) {
-                methods.hardware.elevatorDrive.setPower(-1);
+                methods.Hardware.elevatorDrive.setPower(-1);
             } else {
-                methods.hardware.elevatorDrive.setPower(0);
+                methods.Hardware.elevatorDrive.setPower(0);
             }
             if (gamepad1.left_trigger >= 0.2) {
-                methods.hardware.linearSlide.setPower(speedLimiter);
+                methods.Hardware.linearSlide.setPower(speedLimiter);
             } else {
-                methods.hardware.linearSlide.setPower(0);
+                methods.Hardware.linearSlide.setPower(0);
             }
             /* if (gamepad1.x) {
                 methods.variables.servoPos = !methods.variables.servoPos;
             }
             if (methods.variables.servoPos) {
-                methods.hardware.intakeServo.setPosition(1);
+                methods.Hardware.intakeServo.setPosition(1);
             } else {
-                methods.hardware.intakeServo.setPosition(0);
+                methods.Hardware.intakeServo.setPosition(0);
             } */
-            methods.teleopInput(gamepad1.left_stick_y, gamepad1.right_stick_x, methods.variables.driveLimit, methods.hardware.leftDrive, methods.hardware.rightDrive, this);
-            telemetry.addData("elevatorPosition %7d", methods.hardware.elevatorDrive.getCurrentPosition());
-            // telemetry.addData("servoPosition %7d", methods.hardware.intakeServo.getPosition());
-            telemetry.addData("leftPower", methods.hardware.leftDrive.getPower());
-            telemetry.addData("rightPower", methods.hardware.rightDrive.getPower());
+            methods.teleopInput(gamepad1.left_stick_y, gamepad1.right_stick_x, methods.variables.driveLimit, methods.Hardware.leftDrive, methods.Hardware.rightDrive, this);
+            telemetry.addData("elevatorPosition %7d", methods.Hardware.elevatorDrive.getCurrentPosition());
+            // telemetry.addData("servoPosition %7d", methods.Hardware.intakeServo.getPosition());
+            telemetry.addData("leftPower", methods.Hardware.leftDrive.getPower());
+            telemetry.addData("rightPower", methods.Hardware.rightDrive.getPower());
             telemetry.addData("speedlimiter", speedLimiter);
             telemetry.update();
         }
