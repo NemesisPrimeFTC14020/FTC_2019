@@ -16,66 +16,63 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 @Disabled
 @Autonomous(name = "methods", group = "Concept")
-public class Methods  extends LinearOpMode {
+public class Methods {
     public Variables variables = new Variables();
     public Hardware hardware = new Hardware();
-    public void runOpMode() {
-        hardware.hardwareMap(this);
-    }
-        void initVuforia () {
+        void initVuforia (LinearOpMode myOpMode) {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
             parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
-            parameters.cameraName = hardwareMap.get(WebcamName.class, "Webcam 1");
+            parameters.cameraName = myOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
             variables.vuforia = ClassFactory.getInstance().createVuforia(parameters);
         }
 
-        void initTfod () {
-            int tfodMonitorViewId = hardwareMap.appContext.getResources().getIdentifier(
-                    "tfodMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        void initTfod (LinearOpMode myOpMode) {
+            int tfodMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier(
+                    "tfodMonitorViewId", "id", myOpMode.hardwareMap.appContext.getPackageName());
             TFObjectDetector.Parameters tfodParameters = new TFObjectDetector.Parameters(tfodMonitorViewId);
             variables.tfod = ClassFactory.getInstance().createTFObjectDetector(tfodParameters, variables.vuforia);
             variables.tfod.loadModelFromAsset(variables.TFOD_MODEL_ASSET, variables.LABEL_GOLD_MINERAL, variables.LABEL_SILVER_MINERAL);
         }
 
-        public void gyroTurn ( double speed, double angle){
+        public void gyroTurn ( double speed, double angle, LinearOpMode myOpMode){
             double angleTarget;
-            angleTarget = getHeading() - angle;
-            while (opModeIsActive() && !onHeading(speed, angleTarget, variables.P_TURN_COEFF)) {
-                telemetry.update();
+            angleTarget = getHeading(myOpMode) - angle;
+            while (myOpMode.opModeIsActive() && !onHeading(speed, angleTarget, variables.P_TURN_COEFF, myOpMode)) {
+                myOpMode.telemetry.update();
             }
         }
 
-        public void gyroTurnTo ( double speed, double angle){
-            while (opModeIsActive() && !onHeading(speed, angle, variables.P_TURN_COEFF)) {
-                telemetry.update();
+        public void gyroTurnTo ( double speed, double angle, LinearOpMode myOpMode){
+            while (myOpMode.opModeIsActive() && !onHeading(speed, angle, variables.P_TURN_COEFF, myOpMode)) {
+                myOpMode.telemetry.update();
             }
         }
 
-        public void gyroHold ( double speed, double angle, double holdTime){
+        public void gyroHold ( double speed, double angle, double holdTime, LinearOpMode myOpMode){
             ElapsedTime holdTimer = new ElapsedTime();
             holdTimer.reset();
-            while (opModeIsActive() && (holdTimer.time() < holdTime)) {
-                onHeading(speed, angle, variables.P_TURN_COEFF);
-                telemetry.update();
+            while (myOpMode.opModeIsActive() && (holdTimer.time() < holdTime)) {
+                onHeading(speed, angle, variables.P_TURN_COEFF, myOpMode);
+                myOpMode.telemetry.update();
             }
             hardware.leftDrive.setPower(0);
             hardware.rightDrive.setPower(0);
         }
 
-        boolean onHeading ( double speed, double angle, double PCoeff){
+        boolean onHeading ( double speed, double angle, double PCoeff, LinearOpMode myOpMode){
             double error;
             double steer;
             boolean onTarget = false;
             double leftSpeed;
             double rightSpeed;
-            error = getError(angle);
+            error = getError(angle, myOpMode);
             if (Math.abs(error) <= variables.HEADING_THRESHOLD) {
                 steer = 0.0;
                 leftSpeed = 0.0;
                 rightSpeed = 0.0;
                 onTarget = true;
             } else {
-                steer = getSteer(error, PCoeff);
+                steer = getSteer(error, PCoeff, myOpMode);
                 double signMultiplier = 0;
                 if (steer > 0) {
                     signMultiplier = 1;
@@ -87,33 +84,33 @@ public class Methods  extends LinearOpMode {
             }
             hardware.leftDrive.setPower(leftSpeed);
             hardware.rightDrive.setPower(rightSpeed);
-            telemetry.addData("Target", "%5.2f", angle);
-            telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
-            telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
-            telemetry.addData("heading", "%5.1f,", getHeading());
-            telemetry.update();
+            myOpMode.telemetry.addData("Target", "%5.2f", angle);
+            myOpMode.telemetry.addData("Err/St", "%5.2f/%5.2f", error, steer);
+            myOpMode.telemetry.addData("Speed.", "%5.2f:%5.2f", leftSpeed, rightSpeed);
+            myOpMode.telemetry.addData("heading", "%5.1f,", getHeading(myOpMode));
+            myOpMode.telemetry.update();
             return onTarget;
         }
 
-        public double getError ( double targetAngle){
+        public double getError ( double targetAngle, LinearOpMode myOpMode){
             double robotError;
-            robotError = targetAngle - getHeading();
+            robotError = targetAngle - getHeading(myOpMode);
             return robotError;
         }
 
-        public double getSteer ( double error, double PCoeff){
+        public double getSteer ( double error, double PCoeff, LinearOpMode myOpMode){
             return Range.clip(error * PCoeff, -1, 1);
         }
 
-        public double getHeading () {
+        public double getHeading (LinearOpMode myOpMode) {
             Orientation angles = hardware.gyro.getAngularOrientation();
             return angles.firstAngle + 180;
         }
 
-        public void encoderDrive ( double speed, double leftMM, double rightMM, double timeoutS){
+        public void encoderDrive ( double speed, double leftMM, double rightMM, double timeoutS, LinearOpMode myOpMode){
             int newLeftTarget;
             int newRightTarget;
-            if (opModeIsActive()) {
+            if (myOpMode.opModeIsActive()) {
                 newLeftTarget = hardware.leftDrive.getCurrentPosition() - (int) (leftMM * variables.COUNTS_PER_MM);
                 newRightTarget = hardware.rightDrive.getCurrentPosition() - (int) (rightMM * variables.COUNTS_PER_MM);
                 hardware.leftDrive.setTargetPosition(newLeftTarget);
@@ -123,14 +120,14 @@ public class Methods  extends LinearOpMode {
                 variables.runtime.reset();
                 hardware.leftDrive.setPower(Math.abs(speed));
                 hardware. rightDrive.setPower(Math.abs(speed));
-                while (opModeIsActive() &&
+                while (myOpMode.opModeIsActive() &&
                         (variables.runtime.seconds() < timeoutS) &&
                         (hardware.leftDrive.isBusy() && hardware.rightDrive.isBusy())) {
-                    telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
-                    telemetry.addData("Path2", "Running at %7d :%7d",
+                    myOpMode.telemetry.addData("Path1", "Running to %7d :%7d", newLeftTarget, newRightTarget);
+                    myOpMode.telemetry.addData("Path2", "Running at %7d :%7d",
                             hardware.leftDrive.getCurrentPosition(),
                             hardware.rightDrive.getCurrentPosition());
-                    telemetry.update();
+                    myOpMode.telemetry.update();
                 }
                 hardware.leftDrive.setPower(0);
                 hardware.rightDrive.setPower(0);
@@ -138,7 +135,7 @@ public class Methods  extends LinearOpMode {
                 hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
-    public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive) {
+    public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
         double leftPower = 0;
         double rightPower = 0;
         leftPower = Range.clip(drive + turn, -1, 1);
@@ -146,19 +143,19 @@ public class Methods  extends LinearOpMode {
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
     }
-    public void elavatorMove(double speed, double inches, double timeoutS) {
+    public void elavatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
-        if (opModeIsActive()) {
+        if (myOpMode.opModeIsActive()) {
             newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
             hardware.elevatorDrive.setTargetPosition(newTarget);
             hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             hardware.elevatorDrive.setPower(Math.abs(1));
             variables.runtime.reset();
-            while (opModeIsActive() &&
+            while (myOpMode.opModeIsActive() &&
                     (variables.runtime.seconds() < timeoutS) &&
                     (hardware.elevatorDrive.isBusy())) {
-                telemetry.addData("Path1", "Running to %7d,", newTarget);
-                telemetry.update();
+                myOpMode.telemetry.addData("Path1", "Running to %7d,", newTarget);
+                myOpMode.telemetry.update();
             }
 
             hardware.leftDrive.setPower(0);
@@ -167,11 +164,11 @@ public class Methods  extends LinearOpMode {
             hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
-    public void elevatorDrive(double speed, double elevatorDis, double timeoutS) {
+    public void elevatorDrive(double speed, double elevatorDis, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
 
         // Ensure that the opmode is still active
-        if (opModeIsActive()) {
+        if (myOpMode.opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
             newTarget = hardware.elevatorDrive.getCurrentPosition() + (int) (elevatorDis * variables.COUNTS_PER_INCH_ELEVATOR);
@@ -191,7 +188,7 @@ public class Methods  extends LinearOpMode {
             // always end the motion as soon as possible.
             // However, if you require that BOTH motors have finished their moves before the robot continues
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
-            while (opModeIsActive() &&
+            while (myOpMode.opModeIsActive() &&
                     (variables.runtime.seconds() < timeoutS) &&
                     (hardware.elevatorDrive.isBusy())) {
                 //if (digitalTouch.getState()) {
@@ -206,7 +203,7 @@ public class Methods  extends LinearOpMode {
 
         }
     }
-    void driveTrainControl (double drive, double turn, DcMotor leftDrive, DcMotor rightDrive) {
+    void driveTrainControl (double drive, double turn, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
         double leftPower = 0;
         double rightPower = 0;
         leftPower = Math.pow(Range.clip(drive + turn, -1, 1),3);

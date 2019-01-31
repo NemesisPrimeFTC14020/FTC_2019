@@ -16,10 +16,10 @@ public class autonFull extends LinearOpMode {
     //public hardware hardware = new hardware();
 
     public void runOpMode() {
-        methods.initVuforia();
+        methods.initVuforia(this);
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            methods.initTfod();
+            methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -29,7 +29,7 @@ public class autonFull extends LinearOpMode {
                 methods.variables.tfod.activate();
             }
         }
-        methods.gyroTurn(Variables.TURN_SPEED, -20);
+        methods.gyroTurn(Variables.TURN_SPEED, -20, this);
         boolean tfodDone = false;
 
         if (methods.variables.tfod != null) {
@@ -61,9 +61,9 @@ public class autonFull extends LinearOpMode {
 
                         tfodDone = false;
                         //turns at angle
-                        methods.gyroTurn(methods.variables.TURN_SPEED, angle - 5);
+                        methods.gyroTurn(methods.variables.TURN_SPEED, angle - 5, this);
                         sleep(500);
-                        methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 5.0);
+                        methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 5.0, this);
 
                     }
 
@@ -74,12 +74,12 @@ public class autonFull extends LinearOpMode {
         }
 
         waitForStart();
-        telemetry.addData("heading:", methods.getHeading());
+        telemetry.addData("heading:", methods.getHeading(this));
         telemetry.update();
-        methods.elevatorDrive(1, 10, 8);// coming off the lander
+        methods.elevatorDrive(1, 10, 8, this);// coming off the lander
         methods.hardware.gyro.initialize(methods.hardware.gyro.getParameters());
         methods.hardware.markerServo.setPosition(1);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, -100, -100, 5.0);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, -100, -100, 5.0, this);
 
     }
 

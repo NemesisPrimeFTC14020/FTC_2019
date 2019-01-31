@@ -25,11 +25,11 @@ import java.util.List;
 public class AutonTensorFlowDepot extends LinearOpMode {
     public Methods methods = new Methods();
     public void runOpMode() {
-        methods.initVuforia();
+        methods.initVuforia(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();
-            methods.initTfod();
+            methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -37,10 +37,10 @@ public class AutonTensorFlowDepot extends LinearOpMode {
         telemetry.update();
         waitForStart();
         methods.variables.runtime.reset();
-        methods.elevatorDrive(1, 9, 4);
-        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4);
-        methods.elevatorDrive(1, -9, 4);
-        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4);
+        methods.elevatorDrive(1, 9, 4, this);
+        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4, this);
+        methods.elevatorDrive(1, -9, 4, this);
+        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4, this);
         //initVuforia();
        /*try
         {
@@ -57,7 +57,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
             methods.variables.tfod.activate();
         }
         boolean tFodDone = false;
-        methods.gyroTurn(Variables.BIG_TURN, -20);
+        methods.gyroTurn(Variables.BIG_TURN, -20, this);
         while (opModeIsActive()) {
             if (methods.variables.tfod != null) {
                 List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
@@ -75,11 +75,11 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                             if (recognition.getLeft() == 0) {
                                 methods.hardware.leftDrive.setPower(0);
                                 methods.hardware.rightDrive.setPower(0);
-                                methods.gyroTurn(Variables.BIG_TURN, 20);
+                                methods.gyroTurn(Variables.BIG_TURN, 20, this);
                             } else if (recognition.getRight() == 0) {
                                 methods.hardware.leftDrive.setPower(0);
                                 methods.hardware.rightDrive.setPower(0);
-                                methods.gyroTurn(Variables.SMALL_TURN, -20);
+                                methods.gyroTurn(Variables.SMALL_TURN, -20, this);
                             } else {
                                 methods.hardware.leftDrive.setPower(0);
                                 methods.hardware.rightDrive.setPower(0);
@@ -93,9 +93,9 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                             float angle = h * d_per_pix;
                             telemetry.addData("the final angle lmao ", angle);
                             telemetry.update();
-                            methods.gyroTurn(Variables.BIG_TURN, angle);
+                            methods.gyroTurn(Variables.BIG_TURN, angle, this);
                             sleep(500);
-                            methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
+                            methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
                             sleep(500);
                         }
                         break;
@@ -110,15 +110,15 @@ public class AutonTensorFlowDepot extends LinearOpMode {
         }
         telemetry.addData("Tfod", "done");
         telemetry.update();
-        if (methods.getHeading() >= 170 && methods.getHeading() <= 190) {
+        if (methods.getHeading(this) >= 170 && methods.getHeading(this) <= 190) {
             telemetry.addLine("center");
             telemetry.update();
             //INSERT CENTER CODE HERE
-        } else if (methods.getHeading() >= 170) {
+        } else if (methods.getHeading(this) >= 170) {
             telemetry.addLine("right");
             telemetry.update();
             //(INSERT RIGHT CODE HERE
-        } else if (methods.getHeading() <= 190) {
+        } else if (methods.getHeading(this) <= 190) {
             telemetry.addLine("left");
             telemetry.update();
             //INSERT LEFT CODE HERE

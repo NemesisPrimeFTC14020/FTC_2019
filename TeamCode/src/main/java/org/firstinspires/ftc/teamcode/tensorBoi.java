@@ -59,9 +59,9 @@ public class tensorBoi extends LinearOpMode {
     @Override
     public void runOpMode() {
         methods.hardware.hardwareMap(this);
-        methods.initVuforia();
+        methods.initVuforia(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            methods.initTfod();
+            methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -70,7 +70,7 @@ public class tensorBoi extends LinearOpMode {
             if (methods.variables.tfod != null) {
                 methods.variables.tfod.activate();
             }
-            methods.gyroTurn(Variables.BIG_TURN, -20);
+            methods.gyroTurn(Variables.BIG_TURN, -20, this);
             while (opModeIsActive()) {
                 if (methods.variables.tfod != null) {
                     List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
@@ -88,11 +88,11 @@ public class tensorBoi extends LinearOpMode {
                                 if (recognition.getLeft() == 0) {
                                     methods.hardware.leftDrive.setPower(0);
                                     methods.hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.BIG_TURN, 20);
+                                    methods.gyroTurn(Variables.BIG_TURN, 20, this);
                                 } else if (recognition.getRight() == 0) {
                                     methods.hardware.leftDrive.setPower(0);
                                     methods.hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.SMALL_TURN, -20);
+                                    methods.gyroTurn(Variables.SMALL_TURN, -20, this);
                                 } else {
                                     methods.hardware.leftDrive.setPower(0);
                                     methods.hardware.rightDrive.setPower(0);
@@ -106,10 +106,10 @@ public class tensorBoi extends LinearOpMode {
                                 float angle = h * d_per_pix;
                                 telemetry.addData("the final angle lmao ", angle);
                                 telemetry.update();
-                                methods.gyroTurn(Variables.BIG_TURN, angle);
+                                methods.gyroTurn(Variables.BIG_TURN, angle, this);
                                 sleep(500);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
+                                methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
+                                methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100, this);
                                 sleep(500);
                             }
                             break;

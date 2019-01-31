@@ -37,12 +37,12 @@ import org.firstinspires.ftc.teamcode.Methods;
 public class AutonTFOD extends LinearOpMode {
     public Methods methods = new Methods();
     public void runOpMode() {
-        methods.initVuforia();
+        methods.initVuforia(this);
         methods.hardware.hardwareMap(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
             telemetry.addData("1", null);
             telemetry.update();
-            methods.initTfod();
+            methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
@@ -50,14 +50,14 @@ public class AutonTFOD extends LinearOpMode {
         telemetry.update();
         waitForStart();
         methods.variables.runtime.reset();
-        methods.elevatorDrive(1, 8.5, 4);
-        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4);
-        methods.elevatorDrive(1, -8.5, 4);
-        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4);
+        methods.elevatorDrive(1, 8.5, 4, this);
+        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4, this);
+        methods.elevatorDrive(1, -8.5, 4, this);
+        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4, this);
         if (methods.variables.tfod != null) {
             methods.variables.tfod.activate();
         }
-        methods.gyroTurn(Variables.TURN_SPEED, -20);
+        methods.gyroTurn(Variables.TURN_SPEED, -20, this);
         boolean tFodDone = false;
         while (opModeIsActive() && tFodDone == false) {
             if (methods.variables.tfod != null) {
@@ -96,10 +96,10 @@ public class AutonTFOD extends LinearOpMode {
                             //    angle = angle - 10;
                             //}
 
-                            methods.gyroTurn(Variables.TURN_SPEED, angle);
+                            methods.gyroTurn(Variables.TURN_SPEED, angle, this);
                             sleep(500);
-                            methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100);
-                            methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100);
+                            methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
+                            methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100, this);
                             sleep(500);
                         }
                     }

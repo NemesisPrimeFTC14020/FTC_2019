@@ -10,6 +10,6 @@ public class encoderTesting extends LinearOpMode {
     public void runOpMode() {
         methods.hardware.hardwareMap(this);
         waitForStart();
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 300, 300, 10);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 300, 300, 10, this);
     }
 }
