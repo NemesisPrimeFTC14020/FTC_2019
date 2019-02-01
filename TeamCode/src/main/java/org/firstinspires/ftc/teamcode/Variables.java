@@ -43,4 +43,5 @@ public class Variables {
     public static final float mmPerInch = 25.4f;
     private boolean targetVisible = false;
     public double driveLimit;
+    public double slideLimit;
 }

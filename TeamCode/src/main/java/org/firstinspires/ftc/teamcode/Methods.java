@@ -14,8 +14,6 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Disabled
-@Autonomous(name = "methods", group = "Concept")
 public class Methods {
     public Variables variables = new Variables();
     public Hardware Hardware = new Hardware();

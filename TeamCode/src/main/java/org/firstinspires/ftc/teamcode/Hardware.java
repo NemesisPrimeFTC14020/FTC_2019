@@ -16,7 +16,7 @@ public class Hardware {
             elevatorDrive = myOpMode.hardwareMap.get(DcMotor.class, "elevator_drive");
             Markerservo = myOpMode.hardwareMap.get(Servo.class, "servo");
             // intakeServo = myOpMode.initHardware.get (Servo.class, "intake");
-            linearSlide = myOpMode.hardwareMap.get (DcMotor.class, "linear_drive");
+            linearSlide = myOpMode.hardwareMap.get (DcMotor.class, "linear_slide");
             //gyroParams
             BNO055IMU.Parameters parametersGyro = new BNO055IMU.Parameters();
             parametersGyro.angleUnit = BNO055IMU.AngleUnit.DEGREES;
