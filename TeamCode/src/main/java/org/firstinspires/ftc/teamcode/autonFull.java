@@ -14,7 +14,6 @@ public class autonFull extends LinearOpMode {
     //public variables variables = new variables();
     public Methods methods = new Methods();
     //public Hardware Hardware = new Hardware();
-
     public void runOpMode() {
         methods.initVuforia(this);
 
