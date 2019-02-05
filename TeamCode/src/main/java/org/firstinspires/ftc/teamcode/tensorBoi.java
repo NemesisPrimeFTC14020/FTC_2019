@@ -75,11 +75,11 @@ public class tensorBoi extends LinearOpMode {
                                 if (recognition.getLeft() == 0) {
                                     methods.Hardware.leftDrive.setPower(0);
                                     methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.BIG_TURN, 20, this);
+                                    methods.gyroTurn(Variables.BIG_TURN, 10, this);
                                 } else if (recognition.getRight() == 0) {
                                     methods.Hardware.leftDrive.setPower(0);
                                     methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.SMALL_TURN, -20, this);
+                                    methods.gyroTurn(Variables.SMALL_TURN, -10, this);
                                 } else {
                                     methods.Hardware.leftDrive.setPower(0);
                                     methods.Hardware.rightDrive.setPower(0);
