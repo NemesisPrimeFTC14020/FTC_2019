@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -41,7 +40,7 @@ import java.util.List;
 
 @Autonomous(name = "Tensorflow", group = "Concept")
 
-public class tensorBoi extends LinearOpMode {
+public class TensorflowValueTesting extends LinearOpMode {
     public Methods methods = new Methods();
     @Override
     public void runOpMode() {
@@ -71,35 +70,9 @@ public class tensorBoi extends LinearOpMode {
                         final int fov = 78;
                         final float d_per_pix = (float) 0.040625;
                         for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                                if (recognition.getLeft() == 0) {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.BIG_TURN, 10, this);
-                                } else if (recognition.getRight() == 0) {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.SMALL_TURN, -10, this);
-                                } else {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                }
-                                float getleftval = (int) recognition.getLeft();
-                                float getrightval = (int) recognition.getRight();
-                                float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
-                                telemetry.addData("Gold p Value that was calculated: ", p);
-                                float h = (float) (p - (0.5 * 800));
-                                telemetry.addData("h value calculated ", h);
-                                float angle = h * d_per_pix;
-                                telemetry.addData("the final angle lmao ", angle);
-                                telemetry.update();
-                                methods.gyroTurn(Variables.BIG_TURN, angle, this);
-                                sleep(500);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100, this);
-                                sleep(500);
-                            }
-                            break;
+                            telemetry.addData("leftPixel", recognition.getLeft());
+                            telemetry.addData("rightPixel", recognition.getRight());
+                            telemetry.update();
                         }
                         telemetry.update();
                     }
