@@ -38,7 +38,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
 
 
-@Autonomous(name = "Tensorflow", group = "Concept")
+@Autonomous(name = "Tensorflow Value Testing", group = "Concept")
 
 public class TensorflowValueTesting extends LinearOpMode {
     public Methods methods = new Methods();
