@@ -9,13 +9,12 @@ import java.util.List;
 
 @Autonomous(name="Auton Tensorflow Depot Blue", group="Minibot")
 public class AutonTensorFlowDepot extends LinearOpMode {
-
     public Methods methods = new Methods();
+
     public void runOpMode() {
+        methods.Hardware.initHardware(this);
         methods.initVuforia(this);
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
-            telemetry.addData("1", null);
-            telemetry.update();
             methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
@@ -24,27 +23,15 @@ public class AutonTensorFlowDepot extends LinearOpMode {
         telemetry.update();
         waitForStart();
         methods.variables.runtime.reset();
-        methods.elevatorDrive(1, 9, 4, this);
-        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4, this);
         methods.elevatorDrive(1, -9, 4, this);
-        methods.encoderDrive(Variables.DRIVE_SPEED, -100, -100, 4, this);
-        //initVuforia();
-       /*try
-        {
-            initVuforia();
-        }
-        catch (Exception e)‏
-        {
-            telemetry.addData("ERROR)", e);
-        }
-*/
+        methods.encoderDrive(Variables.DRIVE_SPEED, 100, 100, 4, this);
 
         /** Wait for the game to begin */
         if (methods.variables.tfod != null) {
             methods.variables.tfod.activate();
         }
-        boolean tFodDone = false;
-        while (opModeIsActive() && (tFodDone == false)) {
+        boolean tfodDone = false;
+        while (opModeIsActive() && !tfodDone) {
             if (methods.variables.tfod != null) {
                 // getUpdatedRecognitions() will return null if no new information is available since
                 // the last time that call was made.
@@ -53,7 +40,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                 int silverMineral1X = -1;
                 int silverMineral2X = -1;
                 final int fov = 78;
-                final float d_per_pix = (float) 0.040625;
+                final double d_per_pix = 0.040625;
                 methods.gyroTurnTo(Variables.TURN_SPEED, 225, this);
                 sleep(500);
                 List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
@@ -69,18 +56,15 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                             telemetry.addLine("Skipper we did it, we found the gold mineral");
                             telemetry.addData("Gold getLeft Value: ", recognition.getLeft());
                             telemetry.addData("Gold getRight Value: ", recognition.getRight());
-                            float getleftval = (int) recognition.getLeft();
-                            float getrightval = (int) recognition.getRight();
-                            float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
+                            double getleftval = (int) recognition.getLeft();
+                            double getrightval = (int) recognition.getRight();
+                            double p = (0.5 * (recognition.getLeft() + recognition.getRight()));
                             telemetry.addData("Gold p Value that was calculated: ", p);
-                            float h = (float) (p - (0.5 * 800));
+                            double h = (p - (0.5 * 800));
                             telemetry.addData("h value calculated ", h);
-                            float angle = h * d_per_pix;
+                            double angle = h * d_per_pix;
                             telemetry.addData("the final angle lmao ", angle);
                             telemetry.update();
-                            //if (angle < 0) {
-                            //    angle = angle - 10;
-                            //}
                             methods.gyroTurn(Variables.TURN_SPEED, angle,  this);
                             sleep(500);
                             methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
@@ -89,10 +73,10 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                             sleep(1500);
                             methods.encoderDrive(Variables.DRIVE_SPEED, 2000, -2000, 20, this);
 
-                            tFodDone = true;
+                            tfodDone = true;
                         }
                     }
-                    if (tFodDone == false) {
+                    if (!tfodDone) {
                         methods. gyroTurnTo(Variables.TURN_SPEED, 135, this);
                         sleep(500);
                         updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
@@ -113,7 +97,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                                     telemetry.addData("Gold p Value that was calculated: ", p);
                                     float h = (float) (p - (0.5 * 800));
                                     telemetry.addData("h value calculated ", h);
-                                    float angle = h * d_per_pix;
+                                    double angle = h * d_per_pix;
                                     telemetry.addData("the final angle lmao ", angle);
                                     telemetry.update();
                                     //if (angle < 0) {
@@ -128,12 +112,12 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                                     sleep(1500);
                                     methods.encoderDrive(Variables.DRIVE_SPEED, -200, -200, 10, this);
                                     sleep(500);
-                                    tFodDone = true;
+                                    tfodDone = true;
                                 }
                             }
                         }
                     }
-                    if (tFodDone == false) {
+                    if (tfodDone) {
                         methods.gyroTurnTo(Variables.TURN_SPEED, 180, this);
                         methods.encoderDrive(Variables.DRIVE_SPEED, 650, 650, 5, this);
                        // methods.Hardware.markerServo.setPosition(1);
