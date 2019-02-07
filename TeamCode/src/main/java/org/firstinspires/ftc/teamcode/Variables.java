@@ -44,4 +44,5 @@ public class Variables {
     private boolean targetVisible = false;
     public double driveLimit;
     public double slideLimit;
+    boolean sampled = true;
 }

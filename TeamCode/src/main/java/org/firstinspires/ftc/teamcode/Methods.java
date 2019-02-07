@@ -10,9 +10,12 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+
+import java.util.List;
 
 public class Methods {
     public Variables variables = new Variables();
@@ -209,4 +212,34 @@ public class Methods {
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
     }
+    boolean isThereGold (LinearOpMode myOpMode) {
+        List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
+        for (Recognition recognition : updatedRecognitions) {
+            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public float goldAngle(LinearOpMode myOpMode)  {
+            float angle = 0;
+        List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
+        for (Recognition recognition : updatedRecognitions) {
+            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                final int fov = 78;
+                final float d_per_pix = (float) 0.040625;
+                float getleftval = (int) recognition.getLeft();
+                float getrightval = (int) recognition.getRight();
+                float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
+                myOpMode.telemetry.addData("Gold p Value that was calculated: ", p);
+                float h = (float) (p - (0.5 * 800));
+                myOpMode.telemetry.addData("h value calculated ", h);
+                angle = h * d_per_pix;
+                myOpMode.telemetry.addData("the final angle lmao ", angle);
+                myOpMode.telemetry.update();
+            }
+        }
+        return angle;
+    }
+
 }

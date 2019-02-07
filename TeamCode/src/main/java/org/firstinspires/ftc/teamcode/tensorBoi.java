@@ -57,51 +57,22 @@ public class tensorBoi extends LinearOpMode {
             if (methods.variables.tfod != null) {
                 methods.variables.tfod.activate();
             }
-            methods.gyroTurn(Variables.BIG_TURN, -20, this);
-            while (opModeIsActive()) {
-                if (methods.variables.tfod != null) {
-                    List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
-                    methods.Hardware.leftDrive.setPower(0.1);
-                    methods.Hardware.rightDrive.setPower(-0.1);
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        int goldMineralX = -1;
-                        int silverMineral1X = -1;
-                        int silverMineral2X = -1;
-                        final int fov = 78;
-                        final float d_per_pix = (float) 0.040625;
-                        for (Recognition recognition : updatedRecognitions) {
-                            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                                if (recognition.getLeft() == 0) {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.BIG_TURN, 10, this);
-                                } else if (recognition.getRight() == 0) {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                    methods.gyroTurn(Variables.SMALL_TURN, -10, this);
-                                } else {
-                                    methods.Hardware.leftDrive.setPower(0);
-                                    methods.Hardware.rightDrive.setPower(0);
-                                }
-                                float getleftval = (int) recognition.getLeft();
-                                float getrightval = (int) recognition.getRight();
-                                float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
-                                telemetry.addData("Gold p Value that was calculated: ", p);
-                                float h = (float) (p - (0.5 * 800));
-                                telemetry.addData("h value calculated ", h);
-                                float angle = h * d_per_pix;
-                                telemetry.addData("the final angle lmao ", angle);
-                                telemetry.update();
-                                methods.gyroTurn(Variables.BIG_TURN, angle, this);
-                                sleep(500);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, 350, 350, 100, this);
-                                methods.encoderDrive(Variables.DRIVE_SPEED, -350, -350, 100, this);
-                                sleep(500);
-                            }
-                            break;
-                        }
+            methods.gyroTurn(Variables.BIG_TURN, -30, this);
+            if (methods.isThereGold(this)) {
+                telemetry.addLine("there is gold");
+                telemetry.update();
+            } else {
+                telemetry.addLine("there is no gold");
+                telemetry.update();
+                methods.Hardware.leftDrive.setPower(-.2);
+                methods.Hardware.rightDrive.setPower(.2);
+                while (opModeIsActive() && methods.variables.sampled == false) {
+                    if (methods.isThereGold(this)) {
+                        methods.Hardware.leftDrive.setPower(0);
+                        methods.Hardware.rightDrive.setPower(0);
+                        telemetry.addLine("goldSeen");
                         telemetry.update();
+                        methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
                     }
                 }
             }
