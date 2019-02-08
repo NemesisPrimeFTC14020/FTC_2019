@@ -27,7 +27,7 @@ public class Variables {
     static final double P_TURN_COEFF = 0.01;
     static final double HEADING_THRESHOLD = 0.5;
     static final double DRIVE_SPEED = 0.5; // higher power = faster traversal
-    static final double BIG_TURN = 0.2;
+    static final double BIG_TURN = 0.3;
     static final double TURN_SPEED = 0.3;
     static final double SMALL_TURN = 0.75; // higher power = faster traversal
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
@@ -45,4 +45,6 @@ public class Variables {
     public double driveLimit;
     public double slideLimit;
     boolean sampled = false;
+    double COUNTS_PER_MOTOR_HEX = 288;
+    double LINEAR_COUNTS_PER_DEGREE = COUNTS_PER_MOTOR_HEX/360;
 }

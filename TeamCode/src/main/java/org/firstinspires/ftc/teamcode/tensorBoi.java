@@ -61,7 +61,7 @@ public class tensorBoi extends LinearOpMode {
                 methods.variables.tfod.activate();
                 telemetry.addLine("tfod On");
             }
-            sleep(500);
+            sleep(1000);
             if (methods.isThereGold(this)) {
                 telemetry.addLine("there is gold");
                 telemetry.update();
@@ -96,6 +96,11 @@ public class tensorBoi extends LinearOpMode {
                         }
                     }
                 }
+            }
+            if (methods.getHeading(this) >= 190) {
+                methods.gyroTurn(methods.variables.BIG_TURN, -10, this);
+            } else if (methods.getHeading(this) <= 170) {
+                methods.gyroTurn(methods.variables.BIG_TURN, 10, this);
             }
             methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 10, this);
         }
