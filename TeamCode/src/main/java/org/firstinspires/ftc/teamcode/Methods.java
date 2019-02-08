@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -14,11 +12,15 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-@Disabled
-@Autonomous(name = "methods", group = "Concept")
 public class Methods {
     public Variables variables = new Variables();
     public Hardware Hardware = new Hardware();
+
+    double leftPower;
+    double rightPower;
+    double leftPowerteleop;
+    double rightPowerteleop;
+
         void initVuforia (LinearOpMode myOpMode) {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
             parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
@@ -107,7 +109,7 @@ public class Methods {
             return angles.firstAngle + 180;
         }
 
-        public void encoderDrive ( double speed, double leftMM, double rightMM, double timeoutS, LinearOpMode myOpMode){
+        public void encoderDrive (double speed, double leftMM, double rightMM, double timeoutS, LinearOpMode myOpMode){
             int newLeftTarget;
             int newRightTarget;
             if (myOpMode.opModeIsActive()) {
@@ -116,7 +118,7 @@ public class Methods {
                 Hardware.leftDrive.setTargetPosition(newLeftTarget);
                 Hardware.rightDrive.setTargetPosition(newRightTarget);
                 Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 variables.runtime.reset();
                 Hardware.leftDrive.setPower(Math.abs(speed));
                 Hardware. rightDrive.setPower(Math.abs(speed));
@@ -135,15 +137,29 @@ public class Methods {
                 Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
-    public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
-        double leftPower = 0;
-        double rightPower = 0;
-        leftPower = Range.clip(drive + turn, -1, 1);
-        rightPower = Range.clip(drive - turn, -1, 1);
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+    public void teleopInput(double drive, double turn, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
+        leftPowerteleop = Range.clip(drive + turn, -1, 1);
+        rightPowerteleop = Range.clip(drive - turn, -1, 1);
+
+        while (leftPowerteleop != 0 || rightPowerteleop != 0) {
+            leftDrive.setPower(leftPowerteleop);
+            rightDrive.setPower(rightPowerteleop);
+
+            if (leftPowerteleop > 0) {
+                leftPowerteleop = leftPowerteleop - 0.001;
+            }
+            else if (leftPowerteleop < 0) {
+                leftPowerteleop = leftPowerteleop + 0.001;
+            }
+            if (rightPowerteleop > 0) {
+                rightPowerteleop = rightPowerteleop - 0.001;
+            }
+            else if (rightPowerteleop < 0) {
+                rightPowerteleop = rightPowerteleop + 0.001;
+            }
+        }
     }
-    public void elavatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
+    public void elevatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
         if (myOpMode.opModeIsActive()) {
             newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
@@ -157,11 +173,10 @@ public class Methods {
                 myOpMode.telemetry.addData("Path1", "Running to %7d,", newTarget);
                 myOpMode.telemetry.update();
             }
-
             Hardware.leftDrive.setPower(0);
-            Hardware. rightDrive.setPower(0);
-            Hardware. elevatorDrive.setPower(0);
-            Hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Hardware.rightDrive.setPower(0);
+            Hardware.elevatorDrive.setPower(0);
+            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void elevatorDrive(double speed, double elevatorDis, double timeoutS, LinearOpMode myOpMode) {

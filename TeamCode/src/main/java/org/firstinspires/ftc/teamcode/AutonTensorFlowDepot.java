@@ -39,9 +39,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                 int goldMineralX = -1;
                 int silverMineral1X = -1;
                 int silverMineral2X = -1;
-                final int fov = 78;
                 final double d_per_pix = 0.040625;
-                methods.gyroTurnTo(Variables.TURN_SPEED, 225, this);
                 sleep(500);
                 List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
                 if (updatedRecognitions != null) {
@@ -120,7 +118,7 @@ public class AutonTensorFlowDepot extends LinearOpMode {
                     if (tfodDone) {
                         methods.gyroTurnTo(Variables.TURN_SPEED, 180, this);
                         methods.encoderDrive(Variables.DRIVE_SPEED, 650, 650, 5, this);
-                       // methods.Hardware.markerServo.setPosition(1);
+                        methods.Hardware.markerServo.setPosition(1);
                         sleep(1500);
                         methods.encoderDrive(Variables.DRIVE_SPEED, -650, -650, 5, this);
                     }
