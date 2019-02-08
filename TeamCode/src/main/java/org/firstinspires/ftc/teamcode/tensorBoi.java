@@ -65,14 +65,12 @@ public class tensorBoi extends LinearOpMode {
             if (methods.isThereGold(this)) {
                 telemetry.addLine("there is gold");
                 telemetry.update();
-                sleep(500);
                 methods.Hardware.leftDrive.setPower(0);
                 methods.Hardware.rightDrive.setPower(0);
-                methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
+                methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             } else {
                 telemetry.addLine("no Gold");
                 telemetry.update();
-                sleep(500);
                 methods.gyroTurn(Variables.BIG_TURN, -20, this);
                 sleep(500);
                 if (methods.isThereGold(this)) {
@@ -81,21 +79,20 @@ public class tensorBoi extends LinearOpMode {
                     sleep(500);
                     methods.Hardware.leftDrive.setPower(0);
                     methods.Hardware.rightDrive.setPower(0);
-                    methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
+                    methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                 } else {
                     telemetry.addLine("there is no gold");
                     telemetry.update();
-                    sleep(500);
-                    methods.Hardware.leftDrive.setPower(-.1);
-                    methods.Hardware.rightDrive.setPower(.1);
+                    methods.Hardware.leftDrive.setPower(-.05);
+                    methods.Hardware.rightDrive.setPower(.05);
                     while (opModeIsActive() && methods.variables.sampled == false) {
                         if (methods.isThereGold(this)) {
                             methods.Hardware.leftDrive.setPower(0);
                             methods.Hardware.rightDrive.setPower(0);
                             telemetry.addLine("goldSeen");
                             telemetry.update();
-                            sleep(500);
-                            methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
+                            methods.variables.sampled = true;
+                            methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                         }
                     }
                 }

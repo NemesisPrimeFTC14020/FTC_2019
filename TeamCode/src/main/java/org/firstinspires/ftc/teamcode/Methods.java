@@ -80,8 +80,8 @@ public class Methods {
                 } else if (steer < 0) {
                     signMultiplier = -1;
                 }
-                rightSpeed = signMultiplier * Range.clip(Math.abs(speed * steer), 0.2, 1);
-                leftSpeed = -rightSpeed;
+                leftSpeed = signMultiplier * Range.clip(Math.abs(speed * steer), 0.2, 1);
+                rightSpeed = -leftSpeed;
             }
             Hardware.leftDrive.setPower(leftSpeed);
             Hardware.rightDrive.setPower(rightSpeed);
@@ -214,32 +214,41 @@ public class Methods {
     }
     boolean isThereGold (LinearOpMode myOpMode) {
         List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
-        for (Recognition recognition : updatedRecognitions) {
-            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                return true;
+        if (updatedRecognitions != null) {
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                    Hardware.leftDrive.setPower(0);
+                    Hardware.rightDrive.setPower(0);
+                    return true;
+                }
             }
+            return false;
+        } else {
+            return  false;
         }
-        return false;
     }
-    public float goldAngle(LinearOpMode myOpMode)  {
-            float angle = 0;
+    public float goldAngle(LinearOpMode myOpMode) {
+        float angle = 0;
         List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
-        for (Recognition recognition : updatedRecognitions) {
-            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
-                final int fov = 78;
-                final float d_per_pix = (float) 0.040625;
-                float getleftval = (int) recognition.getLeft();
-                float getrightval = (int) recognition.getRight();
-                float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
-                myOpMode.telemetry.addData("Gold p Value that was calculated: ", p);
-                float h = (float) (p - (0.5 * 800));
-                myOpMode.telemetry.addData("h value calculated ", h);
-                angle = h * d_per_pix;
-                myOpMode.telemetry.addData("the final angle lmao ", angle);
-                myOpMode.telemetry.update();
+        if (updatedRecognitions != null) {
+            for (Recognition recognition : updatedRecognitions) {
+                if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                    final int fov = 78;
+                    final float d_per_pix = (float) 0.040625;
+                    float getleftval = (int) recognition.getLeft();
+                    float getrightval = (int) recognition.getRight();
+                    float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
+                    myOpMode.telemetry.addData("Gold p Value that was calculated: ", p);
+                    float h = (float) (p - (0.5 * 800));
+                    myOpMode.telemetry.addData("h value calculated ", h);
+                    angle = h * d_per_pix;
+                    myOpMode.telemetry.addData("the final angle lmao ", angle);
+                    myOpMode.telemetry.update();
+                }
             }
+            return angle;
+        } else {
+            return 0;
         }
-        return angle;
     }
-
 }
