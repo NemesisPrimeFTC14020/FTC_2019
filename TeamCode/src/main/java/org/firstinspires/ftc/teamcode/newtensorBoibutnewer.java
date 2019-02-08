@@ -41,7 +41,7 @@ import java.util.List;
 @Disabled
 @Autonomous(name = "Tensorflow", group = "Concept")
 
-public class newtensorBoi extends LinearOpMode {
+public class newtensorBoibutnewer extends LinearOpMode {
     public Methods methods = new Methods();
     @Override
     public void runOpMode() {
@@ -68,7 +68,7 @@ public class newtensorBoi extends LinearOpMode {
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, i, i, 20, this);
                 if (methods.variables.tfod != null) {
                     List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
-                    methods.Hardware.leftDrive.setPower(0.1);
+                            methods.Hardware.leftDrive.setPower(0.1);
                     methods.Hardware.rightDrive.setPower(-0.1);
                     methods.encoderDrive(methods.variables.DRIVE_SPEED, i, i ,10, this);
                     double angleboi = methods.goldAngle(this);
