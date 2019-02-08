@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
@@ -27,8 +28,12 @@ public class Hardware {
             parametersGyro.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
             gyro = myOpMode.hardwareMap.get(BNO055IMU.class, "imu");
             //motor polarity
-            leftDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightDrive.setDirection(DcMotor.Direction.FORWARD);
+            leftDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightDrive.setDirection(DcMotor.Direction.REVERSE);
+            leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
             linearSlide.setDirection(DcMotor.Direction.FORWARD);
             elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

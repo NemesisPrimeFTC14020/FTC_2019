@@ -35,7 +35,7 @@ public class teleOpSingle extends LinearOpMode {
 //            } else {
 //                methods.Hardware.intakeServo.setPosition(0);
 //            }
-//            methods.teleopInput(gamepad1.left_stick_y,gamepad1.right_stick_x,.5, methods.Hardware.leftDrive, methods.Hardware.rightDrive, this);
+            methods.teleopInput(gamepad1.left_stick_y,gamepad1.right_stick_x,.5, methods.Hardware.leftDrive, methods.Hardware.rightDrive, this);
             telemetry.addData("elevatorPosition %7d", methods.Hardware.elevatorDrive.getCurrentPosition());
             //telemetry.addData("servoPosition %7d", methods.Hardware.intakeServo.getPosition());
             telemetry.addData ("leftPower", methods.Hardware.leftDrive.getPower());
