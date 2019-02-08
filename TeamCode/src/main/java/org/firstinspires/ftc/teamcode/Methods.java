@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
@@ -8,19 +10,16 @@ import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import java.util.List;
+
 public class Methods {
     public Variables variables = new Variables();
     public Hardware Hardware = new Hardware();
-
-    double leftPower;
-    double rightPower;
-    double leftPowerteleop;
-    double rightPowerteleop;
-
         void initVuforia (LinearOpMode myOpMode) {
             VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
             parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
@@ -109,7 +108,7 @@ public class Methods {
             return angles.firstAngle + 180;
         }
 
-        public void encoderDrive (double speed, double leftMM, double rightMM, double timeoutS, LinearOpMode myOpMode){
+        public void encoderDrive ( double speed, double leftMM, double rightMM, double timeoutS, LinearOpMode myOpMode){
             int newLeftTarget;
             int newRightTarget;
             if (myOpMode.opModeIsActive()) {
@@ -118,7 +117,7 @@ public class Methods {
                 Hardware.leftDrive.setTargetPosition(newLeftTarget);
                 Hardware.rightDrive.setTargetPosition(newRightTarget);
                 Hardware.leftDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                Hardware. rightDrive.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 variables.runtime.reset();
                 Hardware.leftDrive.setPower(Math.abs(speed));
                 Hardware. rightDrive.setPower(Math.abs(speed));
@@ -137,29 +136,15 @@ public class Methods {
                 Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
-    public void teleopInput(double drive, double turn, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
-        leftPowerteleop = Range.clip(drive + turn, -1, 1);
-        rightPowerteleop = Range.clip(drive - turn, -1, 1);
-
-        while (leftPowerteleop != 0 || rightPowerteleop != 0) {
-            leftDrive.setPower(leftPowerteleop);
-            rightDrive.setPower(rightPowerteleop);
-
-            if (leftPowerteleop > 0) {
-                leftPowerteleop = leftPowerteleop - 0.001;
-            }
-            else if (leftPowerteleop < 0) {
-                leftPowerteleop = leftPowerteleop + 0.001;
-            }
-            if (rightPowerteleop > 0) {
-                rightPowerteleop = rightPowerteleop - 0.001;
-            }
-            else if (rightPowerteleop < 0) {
-                rightPowerteleop = rightPowerteleop + 0.001;
-            }
-        }
+    public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
+        double leftPower = 0;
+        double rightPower = 0;
+        leftPower = Range.clip(drive + turn, -1, 1);
+        rightPower = Range.clip(drive - turn, -1, 1);
+        leftDrive.setPower(leftPower);
+        rightDrive.setPower(rightPower);
     }
-    public void elevatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
+    public void elavatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
         if (myOpMode.opModeIsActive()) {
             newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
@@ -173,10 +158,11 @@ public class Methods {
                 myOpMode.telemetry.addData("Path1", "Running to %7d,", newTarget);
                 myOpMode.telemetry.update();
             }
+
             Hardware.leftDrive.setPower(0);
-            Hardware.rightDrive.setPower(0);
-            Hardware.elevatorDrive.setPower(0);
-            Hardware.elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            Hardware. rightDrive.setPower(0);
+            Hardware. elevatorDrive.setPower(0);
+            Hardware.  elevatorDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
     }
     public void elevatorDrive(double speed, double elevatorDis, double timeoutS, LinearOpMode myOpMode) {
@@ -226,4 +212,34 @@ public class Methods {
         leftDrive.setPower(leftPower);
         rightDrive.setPower(rightPower);
     }
+    boolean isThereGold (LinearOpMode myOpMode) {
+        List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
+        for (Recognition recognition : updatedRecognitions) {
+            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public float goldAngle(LinearOpMode myOpMode)  {
+            float angle = 0;
+        List<Recognition> updatedRecognitions = variables.tfod.getUpdatedRecognitions();
+        for (Recognition recognition : updatedRecognitions) {
+            if (recognition.getLabel().equals(Variables.LABEL_GOLD_MINERAL)) {
+                final int fov = 78;
+                final float d_per_pix = (float) 0.040625;
+                float getleftval = (int) recognition.getLeft();
+                float getrightval = (int) recognition.getRight();
+                float p = (float) (0.5 * (recognition.getLeft() + recognition.getRight()));
+                myOpMode.telemetry.addData("Gold p Value that was calculated: ", p);
+                float h = (float) (p - (0.5 * 800));
+                myOpMode.telemetry.addData("h value calculated ", h);
+                angle = h * d_per_pix;
+                myOpMode.telemetry.addData("the final angle lmao ", angle);
+                myOpMode.telemetry.update();
+            }
+        }
+        return angle;
+    }
+
 }

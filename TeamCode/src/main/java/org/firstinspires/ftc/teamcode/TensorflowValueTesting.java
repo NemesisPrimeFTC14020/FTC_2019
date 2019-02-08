@@ -30,7 +30,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -39,9 +38,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import java.util.List;
 
 
-@Autonomous(name = "Tensorflow", group = "Concept")
+@Autonomous(name = "Tensorflow Value Testing", group = "Concept")
 
-public class tensorBoi extends LinearOpMode {
+public class TensorflowValueTesting extends LinearOpMode {
     public Methods methods = new Methods();
     @Override
     public void runOpMode() {
@@ -51,56 +50,34 @@ public class tensorBoi extends LinearOpMode {
             methods.initTfod(this);
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
-            telemetry.update();
         }
-        telemetry.addLine("ready start");
-        telemetry.update();
         waitForStart();
         if (opModeIsActive()) {
             if (methods.variables.tfod != null) {
                 methods.variables.tfod.activate();
-                telemetry.addLine("tfod On");
             }
-            sleep(500);
-            if (methods.isThereGold(this)) {
-                telemetry.addLine("there is gold");
-                telemetry.update();
-                sleep(500);
-                methods.Hardware.leftDrive.setPower(0);
-                methods.Hardware.rightDrive.setPower(0);
-                methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
-            } else {
-                telemetry.addLine("no Gold");
-                telemetry.update();
-                sleep(500);
-                methods.gyroTurn(Variables.BIG_TURN, -20, this);
-                sleep(500);
-                if (methods.isThereGold(this)) {
-                    telemetry.addLine("there is gold");
-                    telemetry.update();
-                    sleep(500);
-                    methods.Hardware.leftDrive.setPower(0);
-                    methods.Hardware.rightDrive.setPower(0);
-                    methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
-                } else {
-                    telemetry.addLine("there is no gold");
-                    telemetry.update();
-                    sleep(500);
-                    methods.Hardware.leftDrive.setPower(-.1);
-                    methods.Hardware.rightDrive.setPower(.1);
-                    while (opModeIsActive() && methods.variables.sampled == false) {
-                        if (methods.isThereGold(this)) {
-                            methods.Hardware.leftDrive.setPower(0);
-                            methods.Hardware.rightDrive.setPower(0);
-                            telemetry.addLine("goldSeen");
+            methods.gyroTurn(Variables.BIG_TURN, -20, this);
+            while (opModeIsActive()) {
+                if (methods.variables.tfod != null) {
+                    List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
+                    methods.Hardware.leftDrive.setPower(0.1);
+                    methods.Hardware.rightDrive.setPower(-0.1);
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        int goldMineralX = -1;
+                        int silverMineral1X = -1;
+                        int silverMineral2X = -1;
+                        final int fov = 78;
+                        final float d_per_pix = (float) 0.040625;
+                        for (Recognition recognition : updatedRecognitions) {
+                            telemetry.addData("leftPixel", recognition.getLeft());
+                            telemetry.addData("rightPixel", recognition.getRight());
                             telemetry.update();
-                            sleep(500);
-                            methods.gyroTurn(methods.variables.TURN_SPEED, methods.goldAngle(this), this);
                         }
+                        telemetry.update();
                     }
                 }
             }
-            methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 10, this);
         }
         if (methods.variables.tfod != null) {
             methods.variables.tfod.shutdown();
