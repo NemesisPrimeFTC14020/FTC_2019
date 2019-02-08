@@ -27,8 +27,8 @@ public class Hardware {
             parametersGyro.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
             gyro = myOpMode.hardwareMap.get(BNO055IMU.class, "imu");
             //motor polarity
-            leftDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightDrive.setDirection(DcMotor.Direction.FORWARD);
+            leftDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightDrive.setDirection(DcMotor.Direction.REVERSE);
             elevatorDrive.setDirection(DcMotor.Direction.FORWARD);
             linearSlide.setDirection(DcMotor.Direction.FORWARD);
             elevatorDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
