@@ -94,11 +94,11 @@ public class autonFullCrater extends LinearOpMode {
         if (methods.getHeading(this) > 160 && methods.getHeading(this) < 220) {
             methods.variables.goldPlacement = "center";
         }
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 900, 900, 1, this);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 900, 900, 4, this);
         if (methods.variables.goldPlacement != "center") {
             methods.gyroTurnTo(methods.variables.BIG_TURN, 180, this);
-            methods.encoderDrive(methods.variables.DRIVE_SPEED, 200, 200, 5, this);
         }
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 400, 400, 5, this);
         methods.Hardware.Markerservo.setPosition(1);
         sleep(1000);
         telemetry.addLine("opmodefinished");
