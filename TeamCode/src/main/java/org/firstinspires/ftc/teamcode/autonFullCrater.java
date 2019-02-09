@@ -25,8 +25,7 @@ public class autonFullCrater extends LinearOpMode {
         }
         telemetry.addLine("ready start");
         telemetry.update();
-        waitForStart();
-        methods.elevatorDrive(1,-10,4,this);
+        waitForStart();methods.elevatorDrive(1,-10,4,this);
         methods.encoderDrive(methods.variables.DRIVE_SPEED, 75, 75, 4, this);
         methods.elevatorDrive(1,10,4,this);
         methods.encoderDrive(methods.variables.DRIVE_SPEED, -75, -75, 4, this);
@@ -34,6 +33,7 @@ public class autonFullCrater extends LinearOpMode {
             methods.variables.tfod.activate();
             telemetry.addLine("tfod On");
         }
+        methods.isThereGold(this);
         sleep(1000);
         if (methods.isThereGold(this)) {
             methods.Hardware.leftDrive.setPower(0);
@@ -43,15 +43,10 @@ public class autonFullCrater extends LinearOpMode {
             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             telemetry.addLine("end ofdetections");
             telemetry.update();
-            sleep(500);
-            methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-            //methods.Hardware.markerServo.setPosition(1.0);
-            sleep(1000);
-        } else {
+        } else if (methods.isThereGold(this)) {
+
+        }
+        else {
             telemetry.addLine("no Gold");
             telemetry.update();
             methods.gyroTurnTo(Variables.BIG_TURN, 220, this);
@@ -65,13 +60,6 @@ public class autonFullCrater extends LinearOpMode {
                 methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                 telemetry.addLine("end ofdetections");
                 telemetry.update();
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-                // methods.Hardware.markerServo.setPosition(1.0);
-                sleep(1000);
             } else {
                 telemetry.addLine("there is no gold");
                 telemetry.update();
@@ -87,25 +75,26 @@ public class autonFullCrater extends LinearOpMode {
                         methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                         telemetry.addLine("end ofdetections");
                         telemetry.update();
-                        methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-                        // methods.Hardware.markerServo.setPosition(1.0);
-                        sleep(1000);
                     }
                 }
             }
-        }
-        if (methods.variables.tfod != null) {
-            methods.variables.tfod.shutdown();
         }
         if (methods.variables.tfod != null) {
             telemetry.addLine("tfod Shutdown");
             telemetry.update();
             methods.variables.tfod.shutdown();
         }
+        if (methods.getHeading(this) >= 195) {
+            methods.variables.goldPlacement = "left";
+            methods.gyroTurn(methods.variables.BIG_TURN, -3, this);
+        } else if (methods.getHeading(this) <= 175) {
+            methods.variables.goldPlacement = "right";
+            methods.gyroTurn(methods.variables.BIG_TURN, 3, this);
+        }
+        if (methods.getHeading(this) > 160 && methods.getHeading(this) < 220) {
+            methods.variables.goldPlacement = "center";
+        }
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 1, this);
         methods.Hardware.Markerservo.setPosition(1);
         sleep(1000);
         telemetry.addLine("opmodefinished");

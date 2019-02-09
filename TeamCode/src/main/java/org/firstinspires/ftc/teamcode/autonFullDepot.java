@@ -31,6 +31,7 @@ public class autonFullDepot extends LinearOpMode {
             methods.variables.tfod.activate();
             telemetry.addLine("tfod On");
         }
+        methods.isThereGold(this);
         sleep(1000);
         if (methods.isThereGold(this)) {
             methods.Hardware.leftDrive.setPower(0);
@@ -40,13 +41,10 @@ public class autonFullDepot extends LinearOpMode {
             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             telemetry.addLine("end ofdetections");
             telemetry.update();
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-            //methods.Hardware.markerServo.setPosition(1.0);
-            sleep(1000);
-        } else {
+        } else if (methods.isThereGold(this)) {
+
+        }
+            else {
             telemetry.addLine("no Gold");
             telemetry.update();
             methods.gyroTurnTo(Variables.BIG_TURN, 220, this);
@@ -84,24 +82,26 @@ public class autonFullDepot extends LinearOpMode {
             telemetry.update();
             methods.variables.tfod.shutdown();
         }
-        if (methods.getHeading(this) >= 188) {
+        if (methods.getHeading(this) >= 195) {
             methods.variables.goldPlacement = "left";
-        } else if (methods.getHeading(this) <= 172) {
+            methods.gyroTurn(methods.variables.BIG_TURN, -3, this);
+        } else if (methods.getHeading(this) <= 175) {
             methods.variables.goldPlacement = "right";
+            methods.gyroTurn(methods.variables.BIG_TURN, 3, this);
         }
-        if (methods.getHeading(this) >= 172 && methods.getHeading(this) <= 188) {
+        if (methods.getHeading(this) > 160 && methods.getHeading(this) < 220) {
             methods.variables.goldPlacement = "center";
         }
         switch (methods.variables.goldPlacement) {
             case "right":
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
                 methods.gyroTurnTo(methods.variables.BIG_TURN, 225, this);
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 800, 800, 5, this);
                 break;
             case "left":
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
                 methods.gyroTurnTo(methods.variables.BIG_TURN, 135, this);
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 800, 800, 5, this);
                 break;
             case "center":
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, 1300, 1300, 5, this);
@@ -110,7 +110,8 @@ public class autonFullDepot extends LinearOpMode {
                     break;
         }
         methods.Hardware.Markerservo.setPosition(1);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
+        sleep(2000);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, -400, -400, 5, this);
         telemetry.addLine("opmodefinished");
         telemetry.addData("heading:", methods.getHeading(this));
         telemetry.update();

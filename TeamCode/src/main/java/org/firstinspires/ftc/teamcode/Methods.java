@@ -247,11 +247,6 @@ public class Methods {
                     angle = h * d_per_pix;
                     myOpMode.telemetry.addData("the final angle lmao ", angle);
                     myOpMode.telemetry.update();
-                    if (angle >= 8) {
-                        angle = angle + 4;
-                    } else if (angle <= -8) {
-                        angle = angle - 4;
-                    }
                     return angle;
                 }
             } return  angle;

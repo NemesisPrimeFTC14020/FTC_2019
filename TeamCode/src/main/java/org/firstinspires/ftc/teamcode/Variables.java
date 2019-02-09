@@ -28,7 +28,7 @@ public class Variables {
             (WHEEL_DIAMETER_MM * 3.1415 * 2.1);
     static final double P_TURN_COEFF = 0.01;
     static final double HEADING_THRESHOLD = 0.5;
-    static final double DRIVE_SPEED = 0.5; // higher power = faster traversal
+    static final double DRIVE_SPEED = 0.4; // higher power = faster traversal
     static final double BIG_TURN = 0.4;
     static final double TURN_SPEED = 0.35;
     static final double SMALL_TURN = 0.75; // higher power = faster traversal
