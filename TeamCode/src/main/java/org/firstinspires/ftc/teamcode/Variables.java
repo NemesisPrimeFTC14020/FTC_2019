@@ -14,6 +14,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 public class Variables {
     String startQuadrant;
     String trackableName;
+    public String goldPlacement = null;
     static final double COUNTS_PER_MOTOR_REV = 2240;    // we have Core Hex motors, creating a different count value
     public double encoderCalibVal = 2.1;
     static final double COUNTS_PER_MOTOR_REV_ELAVATOR = 288;    // eg: TETRIX Motor Encoder
@@ -26,7 +27,7 @@ public class Variables {
     static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
             (WHEEL_DIAMETER_MM * 3.1415 * 2.1);
     static final double P_TURN_COEFF = 0.01;
-    static final double HEADING_THRESHOLD = 0.25;
+    static final double HEADING_THRESHOLD = 0.5;
     static final double DRIVE_SPEED = 0.5; // higher power = faster traversal
     static final double BIG_TURN = 0.4;
     static final double TURN_SPEED = 0.35;

@@ -10,7 +10,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
 public class Hardware {
-
+    DcMotor leftDrive = null;
+    DcMotor rightDrive = null;
+    BNO055IMU gyro;
+    DcMotor elevatorDrive = null;
+    Servo Markerservo = null;
+    DcMotor linearSlide = null;
         public void initHardware(LinearOpMode myOpMode) {
             leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
             rightDrive = myOpMode.hardwareMap.get(DcMotor.class, "right_drive");
@@ -41,13 +46,5 @@ public class Hardware {
             gyro.initialize(parametersGyro);
         }
     //variables
-    DcMotor leftDrive = null;
-    DcMotor rightDrive = null;
-    BNO055IMU gyro;
-    Servo markerServo;
-    DcMotor elevatorDrive = null;
-    Servo Markerservo = null;
-    Servo intakeServo = null;
-    DcMotor linearSlide = null;
     //gyroParams
 }

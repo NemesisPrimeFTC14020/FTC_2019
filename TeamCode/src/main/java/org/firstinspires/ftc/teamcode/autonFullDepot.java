@@ -4,12 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
-import java.util.List;
-
-@Autonomous(name = "autonFullCrater", group = "Minibot")
-public class autonFullCrater extends LinearOpMode {
+@Autonomous(name = "autonFullDepot", group = "Minibot")
+public class autonFullDepot extends LinearOpMode {
 
     //public variables variables = new variables();
     public Methods methods = new Methods();
@@ -43,8 +40,6 @@ public class autonFullCrater extends LinearOpMode {
             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             telemetry.addLine("end ofdetections");
             telemetry.update();
-            sleep(500);
-            methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
 //        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
 //            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
 //            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
@@ -65,13 +60,6 @@ public class autonFullCrater extends LinearOpMode {
                 methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                 telemetry.addLine("end ofdetections");
                 telemetry.update();
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-                // methods.Hardware.markerServo.setPosition(1.0);
-                sleep(1000);
             } else {
                 telemetry.addLine("there is no gold");
                 telemetry.update();
@@ -87,27 +75,42 @@ public class autonFullCrater extends LinearOpMode {
                         methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
                         telemetry.addLine("end ofdetections");
                         telemetry.update();
-                        methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
-                        // methods.Hardware.markerServo.setPosition(1.0);
-                        sleep(1000);
                     }
                 }
             }
-        }
-        if (methods.variables.tfod != null) {
-            methods.variables.tfod.shutdown();
         }
         if (methods.variables.tfod != null) {
             telemetry.addLine("tfod Shutdown");
             telemetry.update();
             methods.variables.tfod.shutdown();
         }
+        if (methods.getHeading(this) >= 188) {
+            methods.variables.goldPlacement = "left";
+        } else if (methods.getHeading(this) <= 172) {
+            methods.variables.goldPlacement = "right";
+        }
+        if (methods.getHeading(this) >= 172 && methods.getHeading(this) <= 188) {
+            methods.variables.goldPlacement = "center";
+        }
+        switch (methods.variables.goldPlacement) {
+            case "right":
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
+                methods.gyroTurnTo(methods.variables.BIG_TURN, 225, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
+                break;
+            case "left":
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
+                methods.gyroTurnTo(methods.variables.BIG_TURN, 135, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
+                break;
+            case "center":
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 1300, 1300, 5, this);
+                break;
+                default:
+                    break;
+        }
         methods.Hardware.Markerservo.setPosition(1);
-        sleep(1000);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 600, 600, 5, this);
         telemetry.addLine("opmodefinished");
         telemetry.addData("heading:", methods.getHeading(this));
         telemetry.update();

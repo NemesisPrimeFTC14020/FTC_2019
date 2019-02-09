@@ -67,6 +67,9 @@ public class Methods {
             double leftSpeed;
             double rightSpeed;
             error = getError(angle, myOpMode);
+            myOpMode.telemetry.addData("Target", "%5.2f", angle);
+            myOpMode.telemetry.addData("Error", "%5.2f", error);
+            myOpMode.telemetry.update();
             if (Math.abs(error) <= variables.HEADING_THRESHOLD) {
                 steer = 0.0;
                 leftSpeed = 0.0;
@@ -244,9 +247,14 @@ public class Methods {
                     angle = h * d_per_pix;
                     myOpMode.telemetry.addData("the final angle lmao ", angle);
                     myOpMode.telemetry.update();
+                    if (angle >= 8) {
+                        angle = angle + 4;
+                    } else if (angle <= -8) {
+                        angle = angle - 4;
+                    }
+                    return angle;
                 }
-            }
-            return angle;
+            } return  angle;
         } else {
             return 0;
         }

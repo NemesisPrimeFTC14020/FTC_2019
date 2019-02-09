@@ -65,8 +65,18 @@ public class tensorBoi extends LinearOpMode {
                 methods.Hardware.leftDrive.setPower(0);
                 methods.Hardware.rightDrive.setPower(0);
                 telemetry.addLine("there is gold");
-                telemetry.update();
+                sleep(250);
                 methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
+                telemetry.addLine("end ofdetections");
+                telemetry.update();
+                sleep(500);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
+//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
+//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
+//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
+//        }
+                //methods.Hardware.markerServo.setPosition(1.0);
+                sleep(1000);
             } else {
                 telemetry.addLine("no Gold");
                 telemetry.update();
@@ -79,6 +89,15 @@ public class tensorBoi extends LinearOpMode {
                     methods.Hardware.leftDrive.setPower(0);
                     methods.Hardware.rightDrive.setPower(0);
                     methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
+                    telemetry.addLine("end ofdetections");
+                    telemetry.update();
+                    methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
+//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
+//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
+//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
+//        }
+                   // methods.Hardware.markerServo.setPosition(1.0);
+                    sleep(1000);
                 } else {
                     telemetry.addLine("there is no gold");
                     telemetry.update();
@@ -90,7 +109,17 @@ public class tensorBoi extends LinearOpMode {
                             telemetry.addLine("goldSeen");
                             telemetry.update();
                             methods.variables.sampled = true;
+                            sleep(250);
                             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
+                            telemetry.addLine("end ofdetections");
+                            telemetry.update();
+                            methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
+//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
+//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
+//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
+//        }
+                           // methods.Hardware.markerServo.setPosition(1.0);
+                            sleep(1000);
                         }
                     }
                 }
@@ -98,19 +127,13 @@ public class tensorBoi extends LinearOpMode {
         if (methods.variables.tfod != null) {
             methods.variables.tfod.shutdown();
         }
-        telemetry.addLine("end ofdetections");
-        telemetry.update();
-        sleep(500);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
-//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
-//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
-//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
-//        }
         if (methods.variables.tfod != null) {
             telemetry.addLine("tfod Shutdown");
             telemetry.update();
             methods.variables.tfod.shutdown();
         }
+        methods.Hardware.Markerservo.setPosition(1);
+        sleep(1000);
         telemetry.addLine("opmodefinished");
         telemetry.update();
     }
