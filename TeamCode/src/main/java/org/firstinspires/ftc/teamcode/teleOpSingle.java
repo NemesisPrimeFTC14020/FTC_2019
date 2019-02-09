@@ -24,9 +24,9 @@ public class teleOpSingle extends LinearOpMode {
                 methods.Hardware.linearSlide.setPower(0);
             }
             if (gamepad1.right_trigger > 0.05 ) {
-                methods.Hardware.linearSlide.setPower(gamepad1.left_trigger);
+                methods.Hardware.linearSlide.setPower(gamepad1.right_trigger);
             } else if (gamepad1.left_trigger > 0.05) {
-                methods.Hardware.linearSlide.setPower(-gamepad1.right_trigger);
+                methods.Hardware.linearSlide.setPower(-gamepad1.left_trigger);
             }
 //            if (gamepad1.x) {
 //                methods.variables.servoPos = !methods.variables.servoPos;
