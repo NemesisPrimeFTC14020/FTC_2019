@@ -38,19 +38,23 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-@Disabled
-@Autonomous(name = "Tensorflow", group = "Concept")
+
+@Autonomous(name = "Tensorflow Checkpoint", group = "Concept")
 
 public class newtensorBoi extends LinearOpMode {
     public Methods methods = new Methods();
     @Override
     public void runOpMode() {
-        final int i = 229;
-        final int t = 1042;
-        final int r = 381;
-        final int segments = 2;
-        double f = 0.3;
-        double d = (t - i - r)*(1 + f);
+        int cts = 0;
+        double dmoved = 0;
+        double angleboi = 0;
+        final int i = 25;
+        //final int t = 1042;
+        //final int r = 381;
+        final int segments = 1;
+        //double f = 0.3;
+        //double d = (t - i - r)*(1 + f);
+        double d = 600;
         double drive = d/segments;
         methods.Hardware.initHardware(this);
         methods.initVuforia(this);
@@ -59,25 +63,40 @@ public class newtensorBoi extends LinearOpMode {
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
+        telemetry.addLine ("start");
+        telemetry.update();
         waitForStart();
         if (opModeIsActive()) {
             if (methods.variables.tfod != null) {
                 methods.variables.tfod.activate();
             }
+            methods.Hardware.leftDrive.setPower(0.1);
+            methods.Hardware.rightDrive.setPower(-0.1);
+            telemetry.addLine ("move into loop");
+            telemetry.update();
             while (opModeIsActive()) {
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, i, i, 20, this);
                 if (methods.variables.tfod != null) {
-                    List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
-                    methods.Hardware.leftDrive.setPower(0.1);
-                    methods.Hardware.rightDrive.setPower(-0.1);
-                    methods.encoderDrive(methods.variables.DRIVE_SPEED, i, i ,10, this);
-                    double angleboi = methods.goldAngle(this);
-                    methods.gyroTurn(methods.variables.DRIVE_SPEED, angleboi, this);
-                    methods.encoderDrive(methods.variables.DRIVE_SPEED, drive, drive ,10, this);
-                    angleboi = methods.goldAngle(this);
-                    methods.gyroTurn(methods.variables.DRIVE_SPEED, angleboi, this);
-                    methods.encoderDrive(methods.variables.DRIVE_SPEED, drive, drive ,10, this);
-                    telemetry.update();
+
+                    //List<Recognition> updatedRecognitions = methods.variables.tfod.getUpdatedRecognitions();
+                    //methods.encoderDrive(methods.variables.DRIVE_SPEED, i, i ,10, this);
+                   while(dmoved < d){
+                       angleboi = methods.goldAngle(this);
+                       telemetry.addData("turning: ", angleboi);
+                       telemetry.update();
+                       sleep(2000);
+                       methods.gyroTurn(methods.variables.DRIVE_SPEED, angleboi, this);
+                       telemetry.addData("driving: ", drive);
+                       telemetry.update();
+                       sleep(2000);
+                       methods.encoderDrive(methods.variables.DRIVE_SPEED, drive, drive ,10, this);
+                       dmoved+=drive;
+                       telemetry.addData ("dmoved is : ", dmoved);
+                       cts++;
+                       telemetry.addData("cts", cts);
+                       telemetry.update();
+                   }
+
 
                     }
                 }
