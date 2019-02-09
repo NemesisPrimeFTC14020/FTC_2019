@@ -28,7 +28,7 @@ public class autonFullCrater extends LinearOpMode {
         waitForStart();methods.elevatorDrive(1,-10,4,this);
         methods.encoderDrive(methods.variables.DRIVE_SPEED, 150, 150, 4, this);
         methods.elevatorDrive(1,10,4,this);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, -150, -150, 4, this);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, -75, -75, 4, this);
         if (methods.variables.tfod != null) {
             methods.variables.tfod.activate();
             telemetry.addLine("tfod On");
