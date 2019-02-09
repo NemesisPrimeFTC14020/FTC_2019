@@ -67,9 +67,6 @@ public class Methods {
             double leftSpeed;
             double rightSpeed;
             error = getError(angle, myOpMode);
-            myOpMode.telemetry.addData("Target", "%5.2f", angle);
-            myOpMode.telemetry.addData("Error", "%5.2f", error);
-            myOpMode.telemetry.update();
             if (Math.abs(error) <= variables.HEADING_THRESHOLD) {
                 steer = 0.0;
                 leftSpeed = 0.0;
@@ -139,15 +136,17 @@ public class Methods {
                 Hardware.rightDrive.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             }
         }
-    public void teleopInput(double drive, double turn, double speedLimiter, DcMotor leftDrive, DcMotor rightDrive, LinearOpMode myOpMode) {
-        double leftPower = 0;
-        double rightPower = 0;
-        leftPower = Range.clip(drive + turn, -1, 1);
-        rightPower = Range.clip(drive - turn, -1, 1);
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
-    }
-    public void elavatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
+    public void teleopDrive(double drive, double turn, DcMotor leftDrive, DcMotor rightDrive) {
+        double leftPower = Range.clip(drive + turn, -1, 1);
+        double rightPower = Range.clip(drive - turn, -1, 1);
+
+        while (leftPower != 0 || rightPower != 0) {
+            leftDrive.setPower(leftPower);
+            rightDrive.setPower(rightPower);
+
+          }
+        }
+    public void elevatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;
         if (myOpMode.opModeIsActive()) {
             newTarget = Hardware.elevatorDrive.getCurrentPosition() + (int) (inches * variables.COUNTS_PER_INCH_ELEVATOR);
@@ -247,9 +246,9 @@ public class Methods {
                     angle = h * d_per_pix;
                     myOpMode.telemetry.addData("the final angle lmao ", angle);
                     myOpMode.telemetry.update();
-                    return angle;
                 }
-            } return  angle;
+            }
+            return angle;
         } else {
             return 0;
         }
