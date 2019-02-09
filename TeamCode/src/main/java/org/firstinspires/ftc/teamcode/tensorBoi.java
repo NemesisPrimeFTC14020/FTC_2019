@@ -56,22 +56,21 @@ public class tensorBoi extends LinearOpMode {
         telemetry.addLine("ready start");
         telemetry.update();
         waitForStart();
-        if (opModeIsActive()) {
             if (methods.variables.tfod != null) {
                 methods.variables.tfod.activate();
                 telemetry.addLine("tfod On");
             }
             sleep(1000);
             if (methods.isThereGold(this)) {
-                telemetry.addLine("there is gold");
-                telemetry.update();
                 methods.Hardware.leftDrive.setPower(0);
                 methods.Hardware.rightDrive.setPower(0);
+                telemetry.addLine("there is gold");
+                telemetry.update();
                 methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             } else {
                 telemetry.addLine("no Gold");
                 telemetry.update();
-                methods.gyroTurn(Variables.BIG_TURN, -20, this);
+                methods.gyroTurnTo(Variables.BIG_TURN, 220, this);
                 sleep(500);
                 if (methods.isThereGold(this)) {
                     telemetry.addLine("there is gold");
@@ -83,8 +82,7 @@ public class tensorBoi extends LinearOpMode {
                 } else {
                     telemetry.addLine("there is no gold");
                     telemetry.update();
-                    methods.Hardware.leftDrive.setPower(-.05);
-                    methods.Hardware.rightDrive.setPower(.05);
+                    methods.gyroTurnTo(Variables.BIG_TURN, 140, this);
                     while (opModeIsActive() && methods.variables.sampled == false) {
                         if (methods.isThereGold(this)) {
                             methods.Hardware.leftDrive.setPower(0);
@@ -97,15 +95,23 @@ public class tensorBoi extends LinearOpMode {
                     }
                 }
             }
-            if (methods.getHeading(this) >= 190) {
-                methods.gyroTurn(methods.variables.BIG_TURN, -10, this);
-            } else if (methods.getHeading(this) <= 170) {
-                methods.gyroTurn(methods.variables.BIG_TURN, 10, this);
-            }
-            methods.encoderDrive(methods.variables.DRIVE_SPEED, 350, 350, 10, this);
-        }
         if (methods.variables.tfod != null) {
             methods.variables.tfod.shutdown();
         }
+        telemetry.addLine("end ofdetections");
+        telemetry.update();
+        sleep(500);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 850, 850, 10, this);
+//        if (methods.getHeading(this) <= 185 && methods.getHeading(this) >= 175) {
+//            methods.gyroTurn(methods.variables.BIG_TURN, -20, this);
+//            methods.encoderDrive(methods.variables.DRIVE_SPEED, 50, 50, 10, this);
+//        }
+        if (methods.variables.tfod != null) {
+            telemetry.addLine("tfod Shutdown");
+            telemetry.update();
+            methods.variables.tfod.shutdown();
+        }
+        telemetry.addLine("opmodefinished");
+        telemetry.update();
     }
 }

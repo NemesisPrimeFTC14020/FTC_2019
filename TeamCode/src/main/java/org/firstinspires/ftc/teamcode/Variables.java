@@ -15,6 +15,7 @@ public class Variables {
     String startQuadrant;
     String trackableName;
     static final double COUNTS_PER_MOTOR_REV = 2240;    // we have Core Hex motors, creating a different count value
+    public double encoderCalibVal = 2.1;
     static final double COUNTS_PER_MOTOR_REV_ELAVATOR = 288;    // eg: TETRIX Motor Encoder
     static final double DRIVE_GEAR_REDUCTION_ELAVATOR = 72 / 30;     // This is < 1.0 if geared UP
     static final double DRIVE_GEAR_REDUCTION = 0.75;
@@ -23,12 +24,12 @@ public class Variables {
     static final double COUNTS_PER_INCH_ELEVATOR = (ENCODER_MAX / ELEVATION);
     static final double WHEEL_DIAMETER_MM = 90;
     static final double COUNTS_PER_MM = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-            (WHEEL_DIAMETER_MM * 3.1415);
+            (WHEEL_DIAMETER_MM * 3.1415 * 2.1);
     static final double P_TURN_COEFF = 0.01;
-    static final double HEADING_THRESHOLD = 0.5;
+    static final double HEADING_THRESHOLD = 0.25;
     static final double DRIVE_SPEED = 0.5; // higher power = faster traversal
-    static final double BIG_TURN = 0.3;
-    static final double TURN_SPEED = 0.3;
+    static final double BIG_TURN = 0.4;
+    static final double TURN_SPEED = 0.35;
     static final double SMALL_TURN = 0.75; // higher power = faster traversal
     static final double P_DRIVE_COEFF = 0.15;     // Larger is more responsive, but also less stable
     static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
@@ -46,5 +47,7 @@ public class Variables {
     public double slideLimit;
     boolean sampled = false;
     double COUNTS_PER_MOTOR_HEX = 288;
-    double LINEAR_COUNTS_PER_DEGREE = COUNTS_PER_MOTOR_HEX/360;
+    double linearSlideGearReduction = 90/30;
+    double LINEAR_COUNTS_PER_DEGREE = (COUNTS_PER_MOTOR_HEX*linearSlideGearReduction)/360;
+
 }
