@@ -24,9 +24,8 @@ public class autonFullDepot extends LinearOpMode {
         telemetry.update();
         waitForStart();
         methods.elevatorDrive(1,-10,4,this);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 75, 75, 4, this);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 150, 150, 4, this);
         methods.elevatorDrive(1,10,4,this);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, -75, -75, 4, this);
         if (methods.variables.tfod != null) {
             methods.variables.tfod.activate();
             telemetry.addLine("tfod On");
@@ -41,10 +40,7 @@ public class autonFullDepot extends LinearOpMode {
             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             telemetry.addLine("end ofdetections");
             telemetry.update();
-        } else if (methods.isThereGold(this)) {
-
-        }
-            else {
+        } else {
             telemetry.addLine("no Gold");
             telemetry.update();
             methods.gyroTurnTo(Variables.BIG_TURN, 220, this);
