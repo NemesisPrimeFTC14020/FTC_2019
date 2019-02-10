@@ -139,12 +139,8 @@ public class Methods {
     public void teleopDrive(double drive, double turn, DcMotor leftDrive, DcMotor rightDrive) {
         double leftPower = Range.clip(drive + turn, -1, 1);
         double rightPower = Range.clip(drive - turn, -1, 1);
-
-        while (leftPower != 0 || rightPower != 0) {
-            leftDrive.setPower(leftPower);
-            rightDrive.setPower(rightPower);
-
-          }
+            Hardware.leftDrive.setPower(leftPower);
+            Hardware.rightDrive.setPower(rightPower);
         }
     public void elevatorMove(double speed, double inches, double timeoutS, LinearOpMode myOpMode) {
         int newTarget;

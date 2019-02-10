@@ -12,7 +12,8 @@ public class teleOpSingle extends LinearOpMode {
     double pastrightPower = 0;
     double leftdiff;
     double rightdiff;
-
+    double drive = 0;
+    double steer = 0;
     @Override
     public void runOpMode() {
         methods.Hardware.initHardware(this);
@@ -34,19 +35,17 @@ public class teleOpSingle extends LinearOpMode {
                 } else {
                     methods.Hardware.linearSlide.setPower(0);
                 }
-
-                methods.teleopDrive(gamepad1.left_stick_y, gamepad1.right_stick_x, methods.Hardware.leftDrive, methods.Hardware.rightDrive);
-
-                
-                leftdiff = Math.abs(Range.clip(gamepad1.left_stick_y + gamepad1.right_stick_x, -1, 1) - pastleftPower);
-                rightdiff = Math.abs(Range.clip(gamepad1.left_stick_y - gamepad1.right_stick_x, -1, 1) - pastrightPower);
-                pastleftPower = Range.clip(gamepad1.left_stick_y + gamepad1.right_stick_x, -1, 1);
-                pastrightPower = Range.clip(gamepad1.left_stick_y - gamepad1.right_stick_x, -1, 1);
-
+                drive = gamepad1.left_stick_y >= 0 ? Math.pow(gamepad1.left_stick_y, 2) : Math.pow(gamepad1.left_stick_y, 2) * -1.0;
+                steer = gamepad1.right_stick_x >= 0 ? Math.pow(gamepad1.right_stick_x, 2) : Math.pow(gamepad1.right_stick_x, 2) * -1.0;
+                methods.teleopDrive(drive, steer, methods.Hardware.leftDrive, methods.Hardware.rightDrive);
                 telemetry.addData("elevatorPosition %7d", methods.Hardware.elevatorDrive.getCurrentPosition());
                 //telemetry.addData("servoPosition %7d", methods.Hardware.intakeServo.getPosition());
                 telemetry.addData("leftPower", methods.Hardware.leftDrive.getPower());
                 telemetry.addData("rightPower", methods.Hardware.rightDrive.getPower());
+                telemetry.addData("drive", drive);
+                telemetry.addData("steer", steer);
+                telemetry.addData("leftStick", gamepad1.left_stick_y);
+                telemetry.addData("rightStick", gamepad1.right_stick_x);
                 telemetry.update();
             }
         }
