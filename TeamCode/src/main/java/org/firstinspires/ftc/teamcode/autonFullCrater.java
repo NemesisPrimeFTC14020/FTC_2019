@@ -25,10 +25,10 @@ public class autonFullCrater extends LinearOpMode {
         }
         telemetry.addLine("ready start");
         telemetry.update();
-        waitForStart();methods.elevatorDrive(1,-10,4,this);
+        waitForStart();
+        methods.elevatorDrive(1,-10,4,this);
         methods.encoderDrive(methods.variables.DRIVE_SPEED, 150, 150, 4, this);
         methods.elevatorDrive(1,10,4,this);
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, -75, -75, 4, this);
         if (methods.variables.tfod != null) {
             methods.variables.tfod.activate();
             telemetry.addLine("tfod On");
@@ -43,10 +43,7 @@ public class autonFullCrater extends LinearOpMode {
             methods.gyroTurn(methods.variables.BIG_TURN, methods.goldAngle(this), this);
             telemetry.addLine("end ofdetections");
             telemetry.update();
-        } else if (methods.isThereGold(this)) {
-
-        }
-        else {
+        } else {
             telemetry.addLine("no Gold");
             telemetry.update();
             methods.gyroTurnTo(Variables.BIG_TURN, 220, this);
@@ -98,7 +95,7 @@ public class autonFullCrater extends LinearOpMode {
         if (methods.variables.goldPlacement != "center") {
             methods.gyroTurnTo(methods.variables.BIG_TURN, 180, this);
         }
-        methods.encoderDrive(methods.variables.DRIVE_SPEED, 400, 400, 5, this);
+        methods.encoderDrive(methods.variables.DRIVE_SPEED, 200, 200, 5, this);
         methods.Hardware.Markerservo.setPosition(1);
         sleep(1000);
         telemetry.addLine("opmodefinished");
