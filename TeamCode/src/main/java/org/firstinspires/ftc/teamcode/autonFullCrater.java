@@ -83,12 +83,12 @@ public class autonFullCrater extends LinearOpMode {
         }
         if (methods.getHeading(this) >= 195) {
             methods.variables.goldPlacement = "left";
-            methods.gyroTurn(methods.variables.BIG_TURN, -3, this);
+            methods.gyroTurn(methods.variables.BIG_TURN, -5, this);
         } else if (methods.getHeading(this) <= 175) {
             methods.variables.goldPlacement = "right";
-            methods.gyroTurn(methods.variables.BIG_TURN, 3, this);
+            methods.gyroTurn(methods.variables.BIG_TURN, 5, this);
         }
-        if (methods.getHeading(this) > 160 && methods.getHeading(this) < 220) {
+        if (methods.getHeading(this) > 195 && methods.getHeading(this) < 175) {
             methods.variables.goldPlacement = "center";
         }
         methods.encoderDrive(methods.variables.DRIVE_SPEED, 900, 900, 4, this);

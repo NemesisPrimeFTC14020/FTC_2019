@@ -80,22 +80,22 @@ public class autonFullDepot extends LinearOpMode {
         }
         if (methods.getHeading(this) >= 195) {
             methods.variables.goldPlacement = "left";
-            methods.gyroTurn(methods.variables.BIG_TURN, -3, this);
+            methods.gyroTurn(methods.variables.BIG_TURN, -5, this);
         } else if (methods.getHeading(this) <= 175) {
             methods.variables.goldPlacement = "right";
-            methods.gyroTurn(methods.variables.BIG_TURN, 3, this);
+            methods.gyroTurn(methods.variables.BIG_TURN, 5, this);
         }
-        if (methods.getHeading(this) > 160 && methods.getHeading(this) < 220) {
+        if (methods.getHeading(this) > 175 && methods.getHeading(this) < 195) {
             methods.variables.goldPlacement = "center";
         }
         switch (methods.variables.goldPlacement) {
             case "right":
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 900, 900, 5, this);
                 methods.gyroTurnTo(methods.variables.BIG_TURN, 225, this);
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, 800, 800, 5, this);
                 break;
             case "left":
-                methods.encoderDrive(methods.variables.DRIVE_SPEED, 1100, 1100, 5, this);
+                methods.encoderDrive(methods.variables.DRIVE_SPEED, 900, 900, 5, this);
                 methods.gyroTurnTo(methods.variables.BIG_TURN, 135, this);
                 methods.encoderDrive(methods.variables.DRIVE_SPEED, 800, 800, 5, this);
                 break;
