@@ -22,18 +22,27 @@ public class teleOpDouble extends LinearOpMode {
         methods.variables.runtime.reset();
 
         while (opModeIsActive()) {
-            if (gamepad2.a) {
+            if (gamepad1.a) {
                 methods.Hardware.elevatorDrive.setPower(1);
+            } else if (gamepad2.a) {
+                methods.Hardware.elevatorDrive.setPower(1);
+            } else if (gamepad1.b) {
+                methods.Hardware.elevatorDrive.setPower(-1);
             } else if (gamepad2.b) {
                 methods.Hardware.elevatorDrive.setPower(-1);
             } else {
                 methods.Hardware.elevatorDrive.setPower(0);
+            }
 
-                if (gamepad2.right_trigger > 0.05) {
+                if (gamepad1.right_trigger > 0.05) {
                     methods.Hardware.linearSlide.setPower(gamepad1.right_trigger);
-                } else if (gamepad2.left_trigger > 0.05) {
+                } else if (gamepad2.right_trigger > 0.05) {
+                    methods.Hardware.linearSlide.setPower(gamepad1.right_trigger);
+                }else if (gamepad1.left_trigger > 0.05) {
                     methods.Hardware.linearSlide.setPower(-gamepad1.left_trigger);
-                } else {
+                } else if (gamepad2.left_trigger > 0.05) {
+                methods.Hardware.linearSlide.setPower(-gamepad1.left_trigger);
+            } else {
                     methods.Hardware.linearSlide.setPower(0);
                 }
                 if (gamepad1.y && speedChange == 1) {
@@ -61,4 +70,3 @@ public class teleOpDouble extends LinearOpMode {
             }
         }
     }
-}
