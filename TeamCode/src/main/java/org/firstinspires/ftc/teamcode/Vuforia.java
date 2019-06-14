@@ -19,7 +19,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
+@Disabled
 @TeleOp(name="Vuforia", group ="Concept")
 public class Vuforia extends LinearOpMode {
 

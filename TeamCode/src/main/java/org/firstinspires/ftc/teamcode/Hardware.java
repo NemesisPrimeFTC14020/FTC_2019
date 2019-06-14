@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.hardware.bosch.JustLoggingAccelerationIntegrator;
 
@@ -16,6 +17,7 @@ public class Hardware {
     DcMotor elevatorDrive = null;
     Servo Markerservo = null;
     DcMotor linearSlide = null;
+    DigitalChannel digitalTouch;
         public void initHardware(LinearOpMode myOpMode) {
             leftDrive = myOpMode.hardwareMap.get(DcMotor.class, "left_drive");
             rightDrive = myOpMode.hardwareMap.get(DcMotor.class, "right_drive");
@@ -33,6 +35,8 @@ public class Hardware {
             parametersGyro.accelerationIntegrationAlgorithm = new JustLoggingAccelerationIntegrator();
             gyro = myOpMode.hardwareMap.get(BNO055IMU.class, "imu");
             //motor polarity
+            digitalTouch = myOpMode.hardwareMap.get(DigitalChannel.class, "sensor_digital");
+            digitalTouch.setMode(DigitalChannel.Mode.INPUT);
             leftDrive.setDirection(DcMotor.Direction.FORWARD);
             rightDrive.setDirection(DcMotor.Direction.REVERSE);
             leftDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);

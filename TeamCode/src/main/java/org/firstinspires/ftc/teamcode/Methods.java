@@ -20,13 +20,10 @@ import java.util.List;
 public class Methods {
     public Variables variables = new Variables();
     public Hardware Hardware = new Hardware();
-        void initVuforia (LinearOpMode myOpMode) {
-            VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
-            parameters.vuforiaLicenseKey = variables.VUFORIA_KEY;
-            parameters.cameraName = myOpMode.hardwareMap.get(WebcamName.class, "Webcam 1");
-            variables.vuforia = ClassFactory.getInstance().createVuforia(parameters);
-        }
 
+        void initVuforia(LinearOpMode myOpMode) {
+            VuforiaLocalizer vuforia;
+        }
         void initTfod (LinearOpMode myOpMode) {
             int tfodMonitorViewId = myOpMode.hardwareMap.appContext.getResources().getIdentifier(
                     "tfodMonitorViewId", "id", myOpMode.hardwareMap.appContext.getPackageName());
@@ -288,4 +285,26 @@ public class Methods {
 
         }
     }
+    public void holonomicDrive(double x, double y, double rotation, double gyroAngle, DcMotor driveA, DcMotor driveB, DcMotor driveC, DcMotor driveD)
+    {
+
+         // x = TrcUtil.clipRange(x);
+         // y = TrcUtil.clipRange(y);
+         // rotation = TrcUtil.clipRange(rotation);
+
+        double cosA = Math.cos(gyroAngle);
+        double sinA = Math.sin(gyroAngle);
+        double x1 = x*cosA - y*sinA;
+        double y1 = x*sinA + y*cosA;
+
+        /* if (isGyroAssistEnabled()){
+            rotation += getGyroAssistPower(rotation);
+        }
+*/
+        driveA.setPower(x1 + y1 + rotation);
+        driveB.setPower(-x1 + y1 - rotation);
+        driveC.setPower(-x1 + y1 + rotation);
+        driveD.setPower(x1 + y1 - rotation);
+
+    }   //holonomicDrive
 }

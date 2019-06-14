@@ -4,9 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import java.util.List;
-
+@Disabled
 @Autonomous(name="Auton Tensorflow Depot Blue", group="Minibot")
 public class AutonTensorFlowDepot extends LinearOpMode {
     public Methods methods = new Methods();

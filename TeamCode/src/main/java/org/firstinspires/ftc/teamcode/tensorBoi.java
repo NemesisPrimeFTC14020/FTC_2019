@@ -38,7 +38,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 
 import java.util.List;
 
-
+@Disabled
 @Autonomous(name = "Tensorflow", group = "Concept")
 
 public class tensorBoi extends LinearOpMode {
